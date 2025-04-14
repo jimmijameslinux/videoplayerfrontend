@@ -1,0 +1,56 @@
+/* Light Theme */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.light-theme {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Dark Theme */
+  .dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Apply to all elements */
+  .light-theme body, 
+  .light-theme .container {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  
+  .dark-theme body, 
+  .dark-theme .container {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  /* Navbar Styling */
+  .light-theme .navbar {
+    background-color: #f8f9fa;
+    color: #000000;
+  }
+  
+  .dark-theme .navbar {
+    background-color: #1f1f1f;
+    color: #ffffff;
+  }
+  
+  /* Button Styling */
+  .light-theme .btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .dark-theme .btn {
+    background-color: #0d6efd;
+    color: white;
+  }
+  
