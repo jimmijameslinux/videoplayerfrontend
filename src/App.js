@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AuthProvider from './context/AuthContext';
 import OtpVerification from './pages/OtpVerification';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const [plan, setPlan] = useState("Free"); // Default plan is Free
@@ -64,7 +65,7 @@ function App() {
               <p>The page you are looking for does not exist.</p>
             </div>} />
             {/* Uncomment the below line when Profile component is ready */}
-            {/* <Route path="/profile" element={<Profile />} /> */}
+             <Route path="/profile" element={<UserProfile />} />
           </Routes>
         </Router>
       </AuthProvider>

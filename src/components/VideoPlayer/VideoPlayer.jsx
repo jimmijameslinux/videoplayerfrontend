@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect,useContext } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ReactPlayer from "react-player";
 import CommentSection from "../Comments/CommentSection";
@@ -6,7 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "./VideoPlayer.css";
 
-const VideoPlayer = ({setDisablepricing}) => {
+const VideoPlayer = ({ setDisablepricing }) => {
   const { id } = useParams(); // Fix: Use id instead of videoId
   const navigate = useNavigate();
   const [videoData, setVideoData] = useState(null);
@@ -23,15 +23,22 @@ const VideoPlayer = ({setDisablepricing}) => {
   const playerRef = useRef(null);
   // const [isReady, setIsReady] = useState(false);
   const [timeLimit, setTimeLimit] = useState(5 * 60);
+  const [hasDownloaded, setHasDownloaded] = useState(false);
 
   const { user } = useContext(AuthContext);
+
+  const [message, setMessage] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
   //user.plan
   useEffect(() => {
     setLoading(true);
     axios
-    .get(`http://localhost:5000/video/${id}`)
-    .then((response) => {
+      .get(`http://localhost:5000/video/${id}`, {
+        params: { userId: user?.userId }
+      })
+      .then((response) => {
         setVideoData(response.data);
+        setHasDownloaded(response.data.hasDownloaded);
         setLoading(false);
         console.log("Video data fetched:", response.data);
         console.log("ID:", id);
@@ -53,7 +60,7 @@ const VideoPlayer = ({setDisablepricing}) => {
       // navigate("/login");
       return;
     }
-      
+
     switch (user.plan) {
       case "Bronze":
         setTimeLimit(10);
@@ -92,11 +99,12 @@ const VideoPlayer = ({setDisablepricing}) => {
   // };
 
   useEffect(() => {
-    if (played >= timeLimit) {
+    if (!hasDownloaded && played >= timeLimit) {
       setIsPlaying(false);
       navigate("/plans");
     }
-  }, [played, timeLimit, navigate]);
+  }, [played, timeLimit, navigate, hasDownloaded]);
+  
 
   const handleGesture = (event) => {
     event.preventDefault();
@@ -136,6 +144,40 @@ const VideoPlayer = ({setDisablepricing}) => {
   if (!videoData || !videoData.qualities || !videoData.qualities[quality]) {
     return <p className="text-center text-muted">No video available.</p>;
   }
+
+
+  const handleDownload = async () => {
+    if (!user) {
+        setMessage("Please login to download.");
+        return;
+    }
+
+    setIsDownloading(true);
+    setMessage("");
+
+    try {
+        const res = await axios.post(
+            `http://localhost:5000/download/${id}`,
+            { userId: user.userId }  // sending userId in the request body
+        );
+
+        const downloadUrl = res.data.downloadUrl;
+
+        // Trigger browser download
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = ""; // optional: you can set filename here
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        setMessage("Download started!");
+    } catch (err) {
+        setMessage(err.response?.data?.message || "Download failed.");
+    } finally {
+        setIsDownloading(false);
+    }
+};
 
 
   return (
@@ -190,6 +232,14 @@ const VideoPlayer = ({setDisablepricing}) => {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* download button */}
+          <div className="mb-3 d-flex justify-content-center align-items-center">
+            <button onClick={handleDownload} className="btn btn-primary" disabled={isDownloading}>
+              {isDownloading ? "Downloading..." : "Download"}
+            </button>
+            {message && <p className="text-danger ms-2">{message}</p>}
           </div>
 
           {/* <div className="mb-3 d-flex justify-content-center align-items-center">
