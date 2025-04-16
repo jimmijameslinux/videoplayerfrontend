@@ -4,14 +4,16 @@ import VideoPlayer from './components/VideoPlayer/VideoPlayer';
 import VideoPlans from './pages/VideoPlans';
 import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState} from 'react';
+// import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AuthProvider from './context/AuthContext';
 import OtpVerification from './pages/OtpVerification';
 import UserProfile from './pages/UserProfile';
+import AdminLogin from './pages/AdminLogin';
+import AdminSignup from './pages/AdminSignup';
 
 function App() {
   const [plan, setPlan] = useState("Free"); // Default plan is Free
@@ -59,6 +61,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/verify-otp" element={<OtpVerification/>} />
+            {/* admin login and signup */}
+            <Route path="/adminlogin" element={<AdminLogin />} />
+            <Route path="/adminsignup" element={<AdminSignup />} />
             {/* invalid route */}
             <Route path="*" element={<div className="container mt-4 vh-100">
               <h1>404 Not Found</h1>

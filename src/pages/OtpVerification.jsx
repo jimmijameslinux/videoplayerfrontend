@@ -83,16 +83,18 @@ const OtpVerification = () => {
                         disabled={isExpired} // Disable input if OTP is expired
                     />
                 </div>
+                <div className="mb-3 d-flex align-items-center justify-content-center">
                 <button className="btn btn-primary" type="submit">
                     Verify
                 </button>
                 <button
                     type="button"
-                    className="btn btn-link mt-2"
+                    className="btn ms-3"
                     onClick={handleResend}
                 >
                     Resend OTP
                 </button>
+                </div>
             </form>
         </div>
     );

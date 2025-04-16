@@ -24,7 +24,7 @@ const Signup = () => {
             localStorage.setItem("signupEmail", email);
             navigate("/verify-otp", { state: { email } });
         } catch (err) {
-            setError("Signup failed. Try again.");
+            setError(`Signup failed. Try again.${err.response ? ` ${err.response.data.message}` : ""}`);
         }
     };
 
@@ -74,6 +74,9 @@ const Signup = () => {
                 <button className="btn btn-success" type="submit">
                     Signup
                 </button>
+                <div className="mt-3 text-center">
+                    <p>Already have an account? <a href="/login">Login</a></p>
+                </div>
             </form>
         </div>
     );
