@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ disablepricing }) => {
     const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
+    
+    const handleLogout = () => {
+        logout();               // Clear user from context/localStorage
+        navigate("/login");     // Redirect to login page
+    };
 
     return (
         <>
@@ -38,7 +45,7 @@ const Navbar = ({ disablepricing }) => {
                                         <Link className="nav-link" to="/profile">{user.username}</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <button className="btn btn-outline-light ms-2" onClick={logout}>Logout</button>
+                                        <button className="btn btn-outline-light ms-2" onClick={handleLogout}>Logout</button>
                                     </li>
                                 </>
                             )}

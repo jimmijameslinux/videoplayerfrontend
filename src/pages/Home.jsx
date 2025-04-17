@@ -50,10 +50,10 @@ const Home = () => {
             ) : (
                 <div className="row">
                     {filteredVideos.map(video => (
-                        <div key={video._id} className="col-md-6 mb-4">
+                        <div key={video._id} className="d-flex justify-content-center align-items-center col-md-4 mb-4">
                             <div className="card shadow-sm border-0 relative" style={{
                                 height: "250px",
-                                width: "300px",
+                                // width: "300px",
                                 borderRadius: 10
                             }}>
                                 <img src={`http://localhost:5000${video.thumbnail}`} height={"100%"} className="card-img-top" alt={video.title} />

@@ -48,7 +48,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
         setError("Failed to load video.");
         setLoading(false);
       });
-  }, [id]);
+  }, [id, user?.userId]);
 
   // if(user.plan==="Gold"){
   //   setDisablepricing(true);
@@ -77,7 +77,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
       default:
         setTimeLimit(5);
     }
-  }, []);
+  }, [user]);
 
   // useEffect(() => {
   //   if (playerRef.current && isReady) {
@@ -104,7 +104,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
       navigate("/plans");
     }
   }, [played, timeLimit, navigate, hasDownloaded]);
-  
+
 
   const handleGesture = (event) => {
     event.preventDefault();
@@ -146,38 +146,44 @@ const VideoPlayer = ({ setDisablepricing }) => {
   }
 
 
-  const handleDownload = async () => {
+  const handleDownload = async (e) => {
+    e.preventDefault();
+
     if (!user) {
-        setMessage("Please login to download.");
-        return;
+      setMessage("Please login to download.");
+      return;
     }
 
     setIsDownloading(true);
     setMessage("");
 
     try {
-        const res = await axios.post(
-            `http://localhost:5000/download/${id}`,
-            { userId: user.userId }  // sending userId in the request body
-        );
+      const res = await axios.post(
+        `http://localhost:5000/download/${id}`,
+        { userId: user.userId }  // sending userId in the request body
+      );
 
-        const downloadUrl = res.data.downloadUrl;
+      const downloadUrl = res.data.downloadUrl;
+      const newhasdownloaded = res.data.hasDownloaded;
+      setHasDownloaded(newhasdownloaded);
 
-        // Trigger browser download
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = ""; // optional: you can set filename here
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      // Trigger browser download
+      // const link = document.createElement("a");
+      // link.href = downloadUrl;
+      // link.download = ""; // optional: you can set filename here
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
+      console.log(hasDownloaded);
+      // setHasDownloaded(true);
 
-        setMessage("Download started!");
+      setMessage("Download started!");
     } catch (err) {
-        setMessage(err.response?.data?.message || "Download failed.");
+      setMessage(err.response?.data?.message || "Download failed.");
     } finally {
-        setIsDownloading(false);
+      setIsDownloading(false);
     }
-};
+  };
 
 
   return (
@@ -236,10 +242,24 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
           {/* download button */}
           <div className="mb-3 d-flex justify-content-center align-items-center">
-            <button onClick={handleDownload} className="btn btn-primary" disabled={isDownloading}>
-              {isDownloading ? "Downloading..." : "Download"}
+            <button
+              onClick={handleDownload}
+              className="btn btn-primary"
+              disabled={isDownloading || hasDownloaded}
+            >
+              {hasDownloaded
+                ? "Already Downloaded"
+                : isDownloading
+                  ? "Downloading..."
+                  : "Download"}
             </button>
+
             {message && <p className="text-danger ms-2">{message}</p>}
+
+            {hasDownloaded && (
+              <p className="text-success ms-2">You’ve already downloaded this video.</p>
+            )}
+
           </div>
 
           {/* <div className="mb-3 d-flex justify-content-center align-items-center">

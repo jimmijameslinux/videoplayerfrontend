@@ -14,7 +14,13 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:5000/login", { email, password });
+            // const userWithId = {
+            //     ...response.data.user,
+            //     userId: response.data.user._id,
+            // };
             login(response.data.user);
+            // login(userWithId);
+            // localStorage.setItem("user", JSON.stringify(userWithId));
             navigate("/");
         } catch (err) {
             setError("Invalid email or password");
