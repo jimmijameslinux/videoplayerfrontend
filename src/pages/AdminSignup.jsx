@@ -20,7 +20,7 @@ const AdminSignup = () => {
         setMsg('Creating account...');
 
         try {
-            await axios.post('http://localhost:5000/adminsignup', {
+            await axios.post('http://localhost:5000/api/auth/adminsignup', {
                 email: email.trim(),
                 password: password.trim(),
             });

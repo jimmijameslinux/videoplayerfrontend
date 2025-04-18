@@ -27,13 +27,14 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
   const { user } = useContext(AuthContext);
 
+
   const [message, setMessage] = useState("");
   const [isDownloading, setIsDownloading] = useState(false);
   //user.plan
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/video/${id}`, {
+      .get(`http://localhost:5000/api/videos/${id}`, {
         params: { userId: user?.userId }
       })
       .then((response) => {
@@ -47,6 +48,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
         console.error("Error fetching video data:", error);
         setError("Failed to load video.");
         setLoading(false);
+        navigate("/");
       });
   }, [id, user?.userId]);
 
@@ -156,15 +158,17 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
     setIsDownloading(true);
     setMessage("");
-
+console.log("User ID:", user._id);
     try {
       const res = await axios.post(
-        `http://localhost:5000/download/${id}`,
-        { userId: user.userId }  // sending userId in the request body
+        `http://localhost:5000/api/upload/download/${id}`,
+        { userId: user._id }  // sending userId in the request body
       );
 
-      const downloadUrl = res.data.downloadUrl;
+      // const downloadUrl = res.data.downloadUrl;
       const newhasdownloaded = res.data.hasDownloaded;
+      // console.log("Download URL:", res.data.downloadUrl);
+      console.log("Has Downloaded:", newhasdownloaded);
       setHasDownloaded(newhasdownloaded);
 
       // Trigger browser download
@@ -174,7 +178,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
       // document.body.appendChild(link);
       // link.click();
       // document.body.removeChild(link);
-      console.log(hasDownloaded);
+      // console.log(hasDownloaded);
       // setHasDownloaded(true);
 
       setMessage("Download started!");
@@ -185,6 +189,12 @@ const VideoPlayer = ({ setDisablepricing }) => {
     }
   };
 
+  let hasDownloadedconfirm;
+  // loop through user.downloadHistory and match id with videoId
+  if(user){
+  hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
+  console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
+  }
 
   return (
     <>
@@ -245,9 +255,9 @@ const VideoPlayer = ({ setDisablepricing }) => {
             <button
               onClick={handleDownload}
               className="btn btn-primary"
-              disabled={isDownloading || hasDownloaded}
+              disabled={isDownloading || hasDownloadedconfirm}
             >
-              {hasDownloaded
+              {hasDownloadedconfirm
                 ? "Already Downloaded"
                 : isDownloading
                   ? "Downloading..."
@@ -256,7 +266,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
             {message && <p className="text-danger ms-2">{message}</p>}
 
-            {hasDownloaded && (
+            {hasDownloadedconfirm && (
               <p className="text-success ms-2">You’ve already downloaded this video.</p>
             )}
 
@@ -269,8 +279,13 @@ const VideoPlayer = ({ setDisablepricing }) => {
           </div> */}
         </div>
       </div>
-
+      {
+        !hasDownloadedconfirm && (
+        <div className="pb-4">
       {showComments && <CommentSection videoId={id} />}
+      </div>
+        )
+      }
     </>
   );
 };

@@ -14,6 +14,7 @@ import OtpVerification from './pages/OtpVerification';
 import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminSignup from './pages/AdminSignup';
+import Payment from './pages/Payment';
 
 function App() {
   const [plan, setPlan] = useState("Free"); // Default plan is Free
@@ -57,6 +58,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/video/:id" element={<VideoPlayer setDisablepricing={setDisablepricing} />} />
             <Route path="/plans" element={<VideoPlans onPlanSelect={onPlanSelect} />} />
+            <Route path="/payment" element={<Payment />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

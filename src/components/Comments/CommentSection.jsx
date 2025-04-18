@@ -46,6 +46,7 @@ const CommentSection = ({ videoId }) => {
     const getUserLocation = async () => {
         return new Promise((resolve, reject) => {
             if (!navigator.geolocation) {
+                console.log("Geolocation is not supported by this browser.");
                 resolve("Unknown City");
                 return;
             }
@@ -57,22 +58,30 @@ const CommentSection = ({ videoId }) => {
 
                 try {
                     const response = await fetch(apiUrl);
+                    console.log("API Response:", response);
                     const data = await response.json();
+                    console.log("Location data:", data);
                     const city = data.results[0]?.components?.city || "Unknown City";
                     resolve(city);
                 } catch (error) {
-                    resolve("Unknown City");
+                    console.log("Error fetching location:", error);
+                    resolve("Unknown City", error.message);
                 }
-            }, () => {
-                resolve("Unknown City");
+            }, (error) => {
+                console.log("Error fetching location:", error);
+                resolve("Unknown City", error.message);
+
             });
         });
     };
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/get_comments/${videoId}`);
+            console.log("Fetching comments for videoId:", videoId);
+            const response = await axios.get(`http://localhost:5000/api/comments/get_comments/${videoId}`);
+            console.log("Response data:", response.data);
             setComments(response.data);
+            console.log("Fetched comments:", response.data);
         } catch (error) {
             console.error("Error fetching comments:", error);
         }
@@ -90,7 +99,7 @@ const CommentSection = ({ videoId }) => {
         const tempComment = {
             _id: tempId,
             videoId,
-            userId: user.userId,
+            userId: user._id,
             username: user.username,
             text: newComment,
             city: "Fetching...", // Placeholder city
@@ -115,7 +124,7 @@ const CommentSection = ({ videoId }) => {
 
         // Step 5: Send the comment to the backend
         try {
-            const response = await axios.post("http://localhost:5000/add_comment", {
+            const response = await axios.post("http://localhost:5000/api/comments/add_comment", {
                 ...tempComment,
                 city: cityName, // Send actual city to backend
             });
@@ -152,9 +161,9 @@ const CommentSection = ({ videoId }) => {
     };
     const handleLike = async (id) => {
         try {
-            const response = await axios.post(`http://localhost:5000/like_comment`, {
+            const response = await axios.patch(`http://localhost:5000/api/comments/like_comment`, {
                 commentId: id,
-                userId: user.userId
+                userId: user._id
             });
 
             // Update the comment with fresh data
@@ -171,9 +180,9 @@ const CommentSection = ({ videoId }) => {
 
     const handleDislike = async (id) => {
         try {
-            const response = await axios.post(`http://localhost:5000/dislike_comment`, {
+            const response = await axios.patch(`http://localhost:5000/api/comments/dislike_comment`, {
                 commentId: id,
-                userId: user.userId
+                userId: user._id
             });
 
             if (response.data.message === "Comment deleted") {

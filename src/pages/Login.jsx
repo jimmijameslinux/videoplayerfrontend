@@ -13,12 +13,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/login", { email, password });
+            const response = await axios.post("http://localhost:5000/api/auth/login", { email, password });
             // const userWithId = {
             //     ...response.data.user,
             //     userId: response.data.user._id,
             // };
             login(response.data.user);
+            console.log("User logged in:", response.data.user);
             // login(userWithId);
             // localStorage.setItem("user", JSON.stringify(userWithId));
             navigate("/");

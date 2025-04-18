@@ -13,17 +13,38 @@ const AdminDashboard = () => {
   const [editing, setEditing] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [error, setError] = useState(null);
+  const [users, setUsers] = useState([]);
 
   const fetchVideos = async () => {
-    const res = await axios.get('http://localhost:5000/videos');
+    const res = await axios.get('http://localhost:5000/api/videos');
     setVideos(res.data);
+  };
+
+  const fetchUsers = async () => {
+    const res = await axios.get('http://localhost:5000/api/admin/videos/users');
+    setUsers(res.data);
   };
 
   useEffect(() => {
     fetchVideos();
   }, []);
 
+  useEffect(() => {
+    fetchUsers();
+  }, [users]);
+
+  let totaldownload = 0;
+  // console.log(totaldownload)
+
+  // loop through users and add the total downloads
+  users.forEach(user => {
+    totaldownload += user.downloads;
+  });
+  console.log(totaldownload)
+
   const handleUpload = async (e) => {
+    console.log("upload")
     e.preventDefault();
     setUploading(true);
     const formData = new FormData();
@@ -32,9 +53,11 @@ const AdminDashboard = () => {
     formData.append('video', videoFile);
 
     try {
-      await axios.post('http://localhost:5000/upload', formData, {
+      await axios.post('http://localhost:5000/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log(formData);
+
       setTitle('');
       setDescription('');
       setVideoFile(null);
@@ -42,7 +65,8 @@ const AdminDashboard = () => {
       fetchVideos();
     } catch (err) {
       alert("Upload failed");
-      console.error(err);
+      console.error(err.message);
+      setError(err.response ? err.response.data.message : 'Upload failed');
     } finally {
       setUploading(false);
     }
@@ -52,7 +76,7 @@ const AdminDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this video?')) return;
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:5000/videos/${id}`);
+      await axios.delete(`http://localhost:5000/api/admin/videos/delete/${id}`);
       setVideos(videos.filter(v => v._id !== id));
     } catch (err) {
       console.error(err);
@@ -71,7 +95,7 @@ const AdminDashboard = () => {
   const handleEditSubmit = async () => {
     setEditing(true);
     try {
-      const res = await axios.put(`http://localhost:5000/videos/${editVideo._id}`, {
+      const res = await axios.put(`http://localhost:5000/api/admin/videos/update/${editVideo._id}`, {
         title: updatedTitle,
         description: updatedDesc
       });
@@ -87,12 +111,19 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="container py-4 vh-100">
+    <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Admin Dashboard</h2>
         <button className="btn btn-success" onClick={() => setShowUploadModal(true)}>
           Upload Video
         </button>
+      </div>
+
+      {/* no. of users */}
+      <div className="d-flex align-items-center">
+        <h5 className="me-3">Total Users: {users.length}</h5>
+        <h5 className="me-3">Total Downloads: {totaldownload}</h5>
+        <h5 className="me-3">Total Videos: {videos.length}</h5>
       </div>
 
       {/* Video Cards */}
@@ -160,6 +191,9 @@ const AdminDashboard = () => {
                     onChange={e => setVideoFile(e.target.files[0])}
                     required
                   />
+                  {/* error message from backend */}
+
+                  {error && <div className="alert alert-danger mt-2">{error}</div>}
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" onClick={() => setShowUploadModal(false)}>Cancel</button>

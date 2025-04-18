@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import Payment from "./Payment"; // Adjust the import path as necessary
 
 const VideoPlans = ({ onPlanSelect }) => {
     const [selectedPlan, setSelectedPlan] = useState("Free");
@@ -29,19 +30,24 @@ const VideoPlans = ({ onPlanSelect }) => {
 
         try {
             // Send PUT request to update the user's plan
-            const response = await axios.patch("http://localhost:5000/update_plan", {
-                userId: user.userId,
-                selectedPlan,
-            });
+            // navigate("/payment", { state: { amt: cost, plan: selectedPlan } });
+            // console.log("User", user);
+            // console.log("Updating plan for user:", user._id, "to", selectedPlan);
+            // console.log("Selected plan:", selectedPlan);
+            // const response = await axios.patch("http://localhost:5000/api/user/update_plan", {
+            //     userId: user._id,
+            //     selectedPlan,
+            // });
 
-            alert(`Payment Successful for ${plans[selectedPlan].name} Plan! Invoice Sent.`);
+            // alert(`Payment Successful for ${plans[selectedPlan].name} Plan! Invoice Sent.`);
             
-            // Update user in context & local storage
-            const updatedUser = response.data.user;
-            setUser(updatedUser);
-            localStorage.setItem("user", JSON.stringify(updatedUser));
+            // // Update user in context & local storage
+            // const updatedUser = response.data.user;
+            // console.log("Updated user data:", updatedUser);
+            // setUser(updatedUser);
+            // localStorage.setItem("user", JSON.stringify(updatedUser));
 
-            navigate(-1); // Navigate back
+            // navigate(-1); // Navigate back
         } catch (error) {
             console.error("Error updating plan:", error);
             alert("Payment failed. Please try again.");
@@ -68,9 +74,10 @@ const VideoPlans = ({ onPlanSelect }) => {
                                     Select {plan}
                                 </button>
                                 {plan !== "Free" && selectedPlan === plan && (
-                                    <button className="btn btn-success" onClick={handlePayment}>
-                                        Pay {plans[plan].cost} Rs
-                                    </button>
+                                    // <button className="btn btn-success" onClick={()=> handlePayment(plans[plan].cost)}>
+                                    //     Pay {plans[plan].cost} Rs
+                                    // </button>
+                                    <Payment amount={plans[plan].cost} plan={plan} onSuccess={() => navigate("/")} />
                                 )}
                             </div>
                         </div>

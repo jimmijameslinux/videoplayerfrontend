@@ -36,7 +36,7 @@ const OtpVerification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:5000/verify-otp", { email, otp });
+            await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
             localStorage.removeItem("signupEmail");
             navigate("/login");
         } catch (err) {
@@ -46,7 +46,7 @@ const OtpVerification = () => {
 
     const handleResend = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/resend-otp", { email });
+            const response = await axios.post("http://localhost:5000/api/auth/resend-otp", { email });
             setResendStatus("OTP resent to your email.");
             setError("");
         } catch (err) {
