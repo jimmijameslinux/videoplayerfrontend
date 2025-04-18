@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ disablepricing }) => {
+const Navbar = ({ disablepricing, theme,setTheme }) => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     
@@ -14,10 +14,12 @@ const Navbar = ({ disablepricing }) => {
         navigate("/login");     // Redirect to login page
     };
 
+   
+
     return (
         <>
             {/* Regular Navbar - visible on md and larger */}
-            <nav className="navbar navbar-expand-md navbar-dark bg-dark d-none d-md-flex">
+            <nav className={`navbar navbar-expand-md ${theme === "light" ? "" : "navbar-dark"} d-none d-md-flex`}>
                 <div className="container">
                     <Link className="navbar-brand" to="/">NullClass Video Library</Link>
                     <div className="collapse navbar-collapse justify-content-end">
@@ -55,7 +57,7 @@ const Navbar = ({ disablepricing }) => {
             </nav>
 
             {/* Offcanvas Navbar - visible only on small devices */}
-            <nav className="navbar navbar-dark bg-dark d-flex d-md-none">
+            <nav className={`navbar ${theme === "light" ? "" : "navbar-dark"} d-flex d-md-none`}>
                 <div className="container-fluid">
                     <button
                         className="btn text-dark me-2 btn-outline-light"

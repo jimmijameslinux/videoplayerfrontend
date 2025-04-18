@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const UserProfile = () => {
     const { user } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     const [downloads, setDownloads] = useState([]);
     const [loading, setLoading] = useState(true);
     // console.log(user.userId)
@@ -43,6 +44,8 @@ const UserProfile = () => {
             });
             console.log(res)
             console.log("Delete response:", res.data);
+            alert("Video deleted successfully!");
+            login(res.data.user);
             setDownloads(downloads.filter(video => video._id !== videoId));
         } catch (err) {
             console.error("Error deleting video:", err);

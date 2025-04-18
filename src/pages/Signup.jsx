@@ -1,6 +1,6 @@
 // Signup.js
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import "../pages/Signup.css"; // Import your CSS file
 
@@ -10,6 +10,8 @@ const Signup = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,7 +36,7 @@ const Signup = () => {
     // const isPasswordValid = passwordRegex.test(password);
 
     return (
-        <div className="container mt-4 vh-100 d-flex justify-content-center align-items-center w-100 flex-column">
+        <div className={`container d-flex justify-content-center align-items-center w-100 flex-column vh-100 pb-5 overflow-hidden`}>
             <h2>Signup</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit} className="w-50">
@@ -71,7 +73,7 @@ const Signup = () => {
                         title="Password must be at least 8 characters long and contain at least one letter and one number."
                     />
                 </div>
-                <button className="btn btn-success" type="submit">
+                <button className="btn btn-primary w-100" type="submit">
                     Signup
                 </button>
                 <div className="mt-3 text-center">

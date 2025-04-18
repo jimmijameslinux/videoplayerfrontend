@@ -26,6 +26,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
   const [hasDownloaded, setHasDownloaded] = useState(false);
 
   const { user } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
 
   const [message, setMessage] = useState("");
@@ -158,7 +159,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
     setIsDownloading(true);
     setMessage("");
-console.log("User ID:", user._id);
+    console.log("User ID:", user._id);
     try {
       const res = await axios.post(
         `http://localhost:5000/api/upload/download/${id}`,
@@ -182,6 +183,14 @@ console.log("User ID:", user._id);
       // setHasDownloaded(true);
 
       setMessage("Download started!");
+      // download complete
+      if(newhasdownloaded) {
+        setMessage("Download completed!");
+      }
+
+      // console.log(res.data)
+      login(res.data.user);
+
     } catch (err) {
       setMessage(err.response?.data?.message || "Download failed.");
     } finally {
@@ -191,16 +200,16 @@ console.log("User ID:", user._id);
 
   let hasDownloadedconfirm;
   // loop through user.downloadHistory and match id with videoId
-  if(user){
-  hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
-  console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
+  if (user) {
+    hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
+    console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
   }
 
   return (
-    <>
+    <div className="vh-100">
       <div className="container text-center pt-4">
-        <h2 className="dark-theme">{videoData.title}</h2>
-        <p className="dark-theme">{videoData.description}</p>
+        <h2>{videoData.title}</h2>
+        <p>{videoData.description}</p>
         <div className="video-container" onClick={handleGesture}>
           <ReactPlayer
             ref={playerRef}
@@ -280,13 +289,13 @@ console.log("User ID:", user._id);
         </div>
       </div>
       {
-        !hasDownloadedconfirm && (
-        <div className="pb-4">
-      {showComments && <CommentSection videoId={id} />}
-      </div>
-        )
+        // !hasDownloadedconfirm && (
+          <div className="pb-4">
+            {showComments && <CommentSection videoId={id} />}
+          </div>
+        // )
       }
-    </>
+    </div>
   );
 };
 

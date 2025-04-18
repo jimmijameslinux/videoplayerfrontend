@@ -18,7 +18,9 @@ import Payment from './pages/Payment';
 
 function App() {
   const [plan, setPlan] = useState("Free"); // Default plan is Free
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("dark"); // Default theme is light
+
+  // setTheme("light");
 
   // useEffect(() => {
   //   const checkTimeAndLocation = async () => {
@@ -50,10 +52,11 @@ function App() {
   const [disablepricing, setDisablepricing] = useState(false);
 
   return (
-    <div className={theme === "light" ? "light-theme" : "dark-theme"}>
+    <div className={`${theme === "light" ? "" : "dark-theme"} container-fluid w-100`}>
+    {/* <div className={`text-white ${isDarkMode ? 'bg-dark' : 'bg-light'}`}> */}
       <AuthProvider>
         <Router>
-          <Navbar disablepricing={disablepricing} />
+          <Navbar disablepricing={disablepricing} theme={theme} setTheme={setTheme} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/video/:id" element={<VideoPlayer setDisablepricing={setDisablepricing} />} />

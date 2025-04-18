@@ -40,7 +40,7 @@ const VideoPlans = ({ onPlanSelect }) => {
             // });
 
             // alert(`Payment Successful for ${plans[selectedPlan].name} Plan! Invoice Sent.`);
-            
+
             // // Update user in context & local storage
             // const updatedUser = response.data.user;
             // console.log("Updated user data:", updatedUser);
@@ -55,36 +55,45 @@ const VideoPlans = ({ onPlanSelect }) => {
     };
 
     return (
-        <div className="container mt-4 d-flex flex-column justify-content-center w-100">
-            <h2>Upgrade Your Plan</h2>
-            <div className="pt-4 pb-3 flex-wrap justify-content-center">
-                {Object.keys(plans).map((plan) => (
-                    // <div key={plan} className="d-flex  justify-content-center">
-                        <div key={plan} className="card text-center mt-3 mx-2">
-                            <div className="card-header">
-                                <h5>{plans[plan].name} Plan</h5>
-                            </div>
-                            <div className="card-body">
-                                <p className="card-text">Time Limit: {plans[plan].timeLimit}</p>
-                                <p className="card-text">Cost: {plans[plan].cost === 0 ? "Free" : `${plans[plan].cost} Rs`}</p>
-                                <button
-                                    className={`btn btn-${plan === selectedPlan ? "primary" : "secondary"} mb-2`}
-                                    onClick={() => handlePlanSelection(plan)}
-                                >
-                                    Select {plan}
-                                </button>
-                                {plan !== "Free" && selectedPlan === plan && (
-                                    // <button className="btn btn-success" onClick={()=> handlePayment(plans[plan].cost)}>
-                                    //     Pay {plans[plan].cost} Rs
-                                    // </button>
-                                    <Payment amount={plans[plan].cost} plan={plan} onSuccess={() => navigate("/")} />
-                                )}
-                            </div>
+        <div className="container py-5">
+    <h2 className="text-center fw-bold mb-5 display-6 text-primary">Upgrade Your Plan</h2>
+    
+    <div className="row justify-content-center g-4">
+        {Object.keys(plans).map((plan) => {
+            const isSelected = plan === selectedPlan;
+            const planData = plans[plan];
+            return (
+                <div key={plan} className="col-md-4">
+                    <div className={`card h-100 shadow-lg border-0 ${isSelected ? "border border-primary" : ""}`}>
+                        <div className={`card-header bg-${isSelected ? "primary" : "light"} text-${isSelected ? "white" : "dark"} text-center`}>
+                            <h4 className="mb-0">{planData.name}</h4>
                         </div>
-                    // </div>
-                ))}
-            </div>
-        </div>
+                        <div className="card-body text-center">
+                            <span className="badge bg-info mb-3">{plan === "Free" ? "Free Forever" : "Premium Access"}</span>
+                            <p className="card-text fs-6"><strong>Time Limit:</strong> {planData.timeLimit}</p>
+                            <p className="card-text fs-6"><strong>Cost:</strong> {planData.cost === 0 ? "₹0" : `₹${planData.cost}`}</p>
+                            <button
+                                className={`btn ${isSelected ? "btn-primary" : "btn-outline-primary"} w-100 my-2`}
+                                onClick={() => handlePlanSelection(plan)}
+                            >
+                                {isSelected ? "Plan Selected" : `Choose ${planData.name}`}
+                            </button>
+                            {isSelected && plan !== "Free" && (
+                                <Payment
+                                    amount={planData.cost}
+                                    plan={plan}
+                                    onSuccess={() => navigate("/")}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        })}
+    </div>
+</div>
+
+
     );
 };
 
