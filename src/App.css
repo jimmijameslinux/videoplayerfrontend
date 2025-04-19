@@ -14,11 +14,11 @@ body {
     overflow-x: hidden;
 }
 
-/* .light-theme {
+.light-theme {
     background-color: #ffffff;
     color: #000000;
     transition: background-color 0.3s, color 0.3s;
-  } */
+  }
   
   /* Dark Theme */
   .dark-theme {

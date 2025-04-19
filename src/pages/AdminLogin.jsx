@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const AdminLogin = () => {
     const [email, setEmail] = useState('');
@@ -8,7 +9,8 @@ const AdminLogin = () => {
     const [msg, setMsg] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
     const navigate = useNavigate();
-
+    
+    const { loginAdmin } = useContext(AuthContext);
     const handleLogin = async (e) => {
         e.preventDefault();
         setMsg('');
@@ -21,6 +23,8 @@ const AdminLogin = () => {
             });
 
             localStorage.setItem('token', res.data.token);
+            loginAdmin(res.data.admin); // Store admin data in context
+            console.log(res.data.admin)
             setMsg('Login successful!');
             setIsSuccess(true);
 
@@ -36,7 +40,7 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="container mt-5 vh-100" style={{ maxWidth: 400 }}>
+        <div className="container pt-5 vh-100" style={{ maxWidth: 400 }}>
             {msg && (
                 <div className={`alert text-center ${isSuccess ? 'alert-success' : 'alert-danger'}`}>
                     {msg}

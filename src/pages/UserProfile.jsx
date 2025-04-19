@@ -8,15 +8,15 @@ const UserProfile = () => {
     const { login } = useContext(AuthContext);
     const [downloads, setDownloads] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [dataloaded, setDataloaded] = useState(false);
     // console.log(user.userId)
     useEffect(() => {
         const fetchDownloads = async () => {
             console.log("Fetching downloads for user:", user._id);
             try {
-                console.log("Fetching downloads for user:", user.userId);
-
                 const res = await axios.get(`http://localhost:5000/api/user/downloads?userId=${user._id}`);
                 setDownloads(res.data);
+                setDataloaded(true);
                 console.log("Downloads fetched:", res.data);
             } catch (err) {
                 console.error("Error fetching downloads:", err);
@@ -37,10 +37,10 @@ const UserProfile = () => {
     const handleDelete = async (videoId) => {
         try {
             console.log("Deleting video with ID:", videoId);
-            console.log("User id",user._id);
+            console.log("User id", user._id);
             const userId = user._id;
             const res = await axios.delete(`http://localhost:5000/api/user/downloads/${userId}/${videoId}`, {
-            // userId: user._id,
+                // userId: user._id,
             });
             console.log(res)
             console.log("Delete response:", res.data);
@@ -52,14 +52,33 @@ const UserProfile = () => {
         }
     }
 
+    const handleEndPlan = async () => {
+        try {
+            const res = await axios.patch("http://localhost:5000/api/user/end_plan", {
+                userId: user._id,
+                newPlan: "Free",
+            });
+            console.log("Plan ended successfully:", res.data);
+            alert("Plan ended successfully!");
+            login(res.data.user);
+            // setDownloads(downloads.filter(video => video._id !== videoId));
+        } catch (err) {
+            console.error("Error ending plan:", err);
+        }
+    }
+
     return (
-        <div className="container mt-4 d-flex justify-content-center align-items-center flex-column">
+        <div className={`container mt-4 d-flex justify-content-center align-items-center flex-column ${dataloaded ? "" : "vh-100"}`}>
             <h2 className="mb-4 text-center pt-4">User Profile</h2>
             <h2>Welcome, {user.username}!</h2>
             <p>Email: {user.email}</p>
             <p>Account Created: {new Date(user.createdAt).toLocaleDateString()}</p>
             <p>Plan: {user.plan}</p>
-
+            {/* user button end plan */}
+            {
+                user.plan !== "Free" &&
+                <button className="btn btn-danger mt-4" onClick={handleEndPlan}>End Plan</button>
+            }
             <hr />
             <h4>Downloaded Videos</h4>
 

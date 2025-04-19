@@ -52,7 +52,7 @@ function App() {
   const [disablepricing, setDisablepricing] = useState(false);
 
   return (
-    <div className={`${theme === "light" ? "" : "dark-theme"} container-fluid w-100`}>
+    <div className={`${theme === "light" ? "light-theme" : "dark-theme"} container-fluid w-100`}>
     {/* <div className={`text-white ${isDarkMode ? 'bg-dark' : 'bg-light'}`}> */}
       <AuthProvider>
         <Router>

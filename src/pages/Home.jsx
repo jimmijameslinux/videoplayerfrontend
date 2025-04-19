@@ -14,13 +14,14 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const { user } = useContext(AuthContext);
     const [sortOption, setSortOption] = useState("title-asc");
-
+    const [dataloaded, setDataloaded] = useState(false);
 
     useEffect(() => {
         axios.get("http://localhost:5000/api/videos")
             .then(response => {
                 console.log("Videos fetched:", response.data);
                 setVideos(response.data);
+                setDataloaded(true);
                 setLoading(false);
             })
             .catch(error => {
@@ -60,7 +61,7 @@ const Home = () => {
 
 
     return (
-        <div className="container">
+        <div className={`container ${dataloaded ? "" : "vh-100"}`}>
             <h2 className="mb-4 text-center pt-4">🎬 NullClass Video Library</h2>
 
             <div className="mb-4 d-flex">

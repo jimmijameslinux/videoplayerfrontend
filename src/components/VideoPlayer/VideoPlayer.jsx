@@ -42,8 +42,8 @@ const VideoPlayer = ({ setDisablepricing }) => {
         setVideoData(response.data);
         setHasDownloaded(response.data.hasDownloaded);
         setLoading(false);
-        console.log("Video data fetched:", response.data);
-        console.log("ID:", id);
+        // console.log("Video data fetched:", response.data);
+        // console.log("ID:", id);
       })
       .catch((error) => {
         console.error("Error fetching video data:", error);
@@ -51,7 +51,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
         setLoading(false);
         navigate("/");
       });
-  }, [id, user?.userId]);
+  }, [id, user?.userId, navigate]);
 
   // if(user.plan==="Gold"){
   //   setDisablepricing(true);
@@ -157,19 +157,25 @@ const VideoPlayer = ({ setDisablepricing }) => {
       return;
     }
 
-    setIsDownloading(true);
-    setMessage("");
-    console.log("User ID:", user._id);
+    // user can download only one video in a day if user is not Gold
+    if (user.plan !== "Gold") {
+      setMessage("You can only download one video per day. Upgrade to Gold for unlimited downloads.");
+      return;
+    }
+
     try {
       const res = await axios.post(
         `http://localhost:5000/api/upload/download/${id}`,
         { userId: user._id }  // sending userId in the request body
       );
+      setMessage("");
+      // console.log("User ID:", user._id);
 
+      setIsDownloading(true);
       // const downloadUrl = res.data.downloadUrl;
       const newhasdownloaded = res.data.hasDownloaded;
       // console.log("Download URL:", res.data.downloadUrl);
-      console.log("Has Downloaded:", newhasdownloaded);
+      // console.log("Has Downloaded:", newhasdownloaded);
       setHasDownloaded(newhasdownloaded);
 
       // Trigger browser download
@@ -184,7 +190,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
       setMessage("Download started!");
       // download complete
-      if(newhasdownloaded) {
+      if (newhasdownloaded) {
         setMessage("Download completed!");
       }
 
@@ -202,11 +208,11 @@ const VideoPlayer = ({ setDisablepricing }) => {
   // loop through user.downloadHistory and match id with videoId
   if (user) {
     hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
-    console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
+    // console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
   }
 
   return (
-    <div className="vh-100">
+    <div className="">
       <div className="container text-center pt-4">
         <h2>{videoData.title}</h2>
         <p>{videoData.description}</p>
@@ -244,7 +250,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
             </select>
           </div>
 
-          <div className="mb-3 d-flex justify-content-center align-items-center">
+          <div className=" ms-3 mb-3 d-flex justify-content-center align-items-center">
             <label className="form-label">Speed:</label>
             <select
               value={playbackRate}
@@ -260,7 +266,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
           </div>
 
           {/* download button */}
-          <div className="mb-3 d-flex justify-content-center align-items-center">
+          <div className="ms-3 mb-3 d-flex justify-content-center align-items-center">
             <button
               onClick={handleDownload}
               className="btn btn-primary"
@@ -273,11 +279,33 @@ const VideoPlayer = ({ setDisablepricing }) => {
                   : "Download"}
             </button>
 
-            {message && <p className="text-danger ms-2">{message}</p>}
-
-            {hasDownloadedconfirm && (
-              <p className="text-success ms-2">You’ve already downloaded this video.</p>
+            {/* {message && <p className="text-danger ms-2">{message}</p>} */}
+            {/* bootstrap alert */}
+            {message && (
+              <>
+              <div className="alert alert-danger mt-2 position-fixed top-0 end-0" role="alert">
+                {message}
+                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                  {/* <span aria-hidden="true">&times;</span> */}
+                </button>
+              </div>
+                </>
+              // close button
             )}
+
+            {/* show message if user has already downloaded */}
+
+
+            {/* {hasDownloadedconfirm && (
+              <div className="alert alert-success mt-2 position-fixed top-0 end-0" role="alert">
+                You have already downloaded this video.
+                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                  </button>
+              </div>
+            )} */}
+
+            {/*  */}
+
 
           </div>
 
@@ -290,9 +318,9 @@ const VideoPlayer = ({ setDisablepricing }) => {
       </div>
       {
         // !hasDownloadedconfirm && (
-          <div className="pb-4">
-            {showComments && <CommentSection videoId={id} />}
-          </div>
+        <div className="pb-4">
+          {showComments && <CommentSection videoId={id} />}
+        </div>
         // )
       }
     </div>

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [title, setTitle] = useState('');
@@ -15,7 +17,11 @@ const AdminDashboard = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
+  const {admin} = useContext(AuthContext);
+  const navigate = useNavigate();
 
+ 
+console.log(admin)
   const fetchVideos = async () => {
     const res = await axios.get('http://localhost:5000/api/videos');
     setVideos(res.data);
@@ -32,16 +38,19 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [users]);
+  }, []);
 
-  let totaldownload = 0;
+  let totaldownload =0;
   // console.log(totaldownload)
 
   // loop through users and add the total downloads
   users.forEach(user => {
     totaldownload += user.downloads;
   });
-  console.log(totaldownload)
+  // console.log(totaldownload)
+
+  // total downloads in useEffect
+
 
   const handleUpload = async (e) => {
     console.log("upload")
@@ -110,15 +119,29 @@ const AdminDashboard = () => {
     }
   };
 
+  // // check if admin is logged in or not
+  useEffect(() => {
+  if(!admin) {
+    navigate('/adminlogin');
+  }
+  }, [admin, navigate]);
+
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Admin Dashboard</h2>
+        {/* admin name */}
+        <div>
         <button className="btn btn-success" onClick={() => setShowUploadModal(true)}>
           Upload Video
         </button>
+        <button className="btn btn-danger ms-2" onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('admin'); navigate('/adminlogin')}}>
+          Logout
+        </button>
+        </div>
       </div>
 
+      <h5 className="me-3 mb-5">Welcome, {admin?.email}</h5>
       {/* no. of users */}
       <div className="d-flex align-items-center">
         <h5 className="me-3">Total Users: {users.length}</h5>

@@ -1,9 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import logo from "./logo192.png"; // Replace with your logo path
 
 const Payment = ({ amount, plan, onSuccess }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -31,9 +31,9 @@ const Payment = ({ amount, plan, onSuccess }) => {
             description: `Purchase ${plan} Plan`,
             image: logo, // Optional
             handler: function (response) {
-                alert("Payment Successful!");
-                console.log("Razorpay Response:", response);
-                onSuccess(); // Trigger parent handler
+                // alert("Payment Successful!");
+                // console.log("Razorpay Response:", response);
+                onSuccess(response); // Trigger parent handler
             },
             prefill: {
                 name: "Test User",

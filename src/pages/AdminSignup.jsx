@@ -38,7 +38,7 @@ const AdminSignup = () => {
     };
 
     return (
-        <div className="container mt-5 vh-100" style={{ maxWidth: 400 }}>
+        <div className="container pt-5 vh-100" style={{ maxWidth: 400 }}>
             {msg && (
                 <div className={`alert text-center ${isSuccess ? 'alert-success' : 'alert-danger'}`}>
                     {msg}

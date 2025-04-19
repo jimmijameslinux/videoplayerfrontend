@@ -36,11 +36,24 @@ const CommentSection = ({ videoId }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [translatedComments, setTranslatedComments] = useState({});
+    const [userLocation, setUserLocation] = useState(''); // Tracks user location
     // const [userInteractions, setUserInteractions] = useState({}); // Tracks user likes/dislikes
 
     useEffect(() => {
         fetchComments();
     }, [videoId]);
+
+    const fetchComments = async () => {
+        try {
+            // console.log("Fetching comments for videoId:", videoId);
+            const response = await axios.get(`http://localhost:5000/api/comments/get_comments/${videoId}`);
+            // console.log("Response data:", response.data);
+            setComments(response.data);
+            // console.log("Fetched comments:", response.data);
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    };
 
     // Get user location (City)
     const getUserLocation = async () => {
@@ -61,48 +74,40 @@ const CommentSection = ({ videoId }) => {
                     console.log("API Response:", response);
                     const data = await response.json();
                     console.log("Location data:", data);
-                    const city = data.results[0]?.components?.city || "Unknown City";
-                    resolve(city);
+                    const components = data.results[0]?.components;
+                    const city = components?.city || components?.town || components?.village || components?.state || "Unknown City";
+                    console.log("City found:", city);
+                    const state = components?.state || "Unknown State";
+                    console.log("State found:", state);
+                    const combinedlocation = `${city}, ${state}`;
+                    setUserLocation(combinedlocation); // Update state with the city
+                    resolve(combinedlocation);
                 } catch (error) {
-                    console.log("Error fetching location:", error);
-                    resolve("Unknown City", error.message);
+                    console.log("Error fetching location:", error.message);
+                    resolve("Unknown City");
                 }
-            }, (error) => {
-                console.log("Error fetching location:", error);
-                resolve("Unknown City", error.message);
-
             });
         });
     };
 
-    const fetchComments = async () => {
-        try {
-            console.log("Fetching comments for videoId:", videoId);
-            const response = await axios.get(`http://localhost:5000/api/comments/get_comments/${videoId}`);
-            console.log("Response data:", response.data);
-            setComments(response.data);
-            console.log("Fetched comments:", response.data);
-        } catch (error) {
-            console.error("Error fetching comments:", error);
-        }
-    };
-
-    const handleCommentSubmit = async () => {
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
         if (!user) {
             alert("You need to log in first!");
             return;
         }
+
         if (!newComment.trim()) return;
 
         // Step 1: Create a temporary comment with a placeholder city
-        const tempId = `temp-${Date.now()}`; // Temporary ID for UI updates
+        const tempId = `temp-${Date.now()}`;
         const tempComment = {
             _id: tempId,
             videoId,
             userId: user._id,
             username: user.username,
             text: newComment,
-            city: "Fetching...", // Placeholder city
+            city: "Fetching...", // Placeholder
             likes: 0,
             dislikes: 0,
             timestamp: new Date().toLocaleString(),
@@ -112,35 +117,39 @@ const CommentSection = ({ videoId }) => {
         setComments([tempComment, ...comments]);
         setNewComment('');
 
-        // Step 3: Fetch city in the background
-        const cityName = await getUserLocation(); // Get actual city
-
-        // Step 4: Update UI with actual city
-        setComments((prevComments) =>
-            prevComments.map((comment) =>
-                comment._id === tempId ? { ...comment, city: cityName } : comment
-            )
-        );
-
-        // Step 5: Send the comment to the backend
         try {
+            // Step 3: Fetch city in background
+            console.log(userLocation);
+            const cityName = await getUserLocation();
+            console.log("City fetched in handleCommentSubmit:", cityName);
+
+            // Step 4: Update UI with actual city
+            setComments((prevComments) =>
+                prevComments.map((comment) =>
+                    comment._id === tempId ? { ...comment, city: cityName } : comment
+                )
+            );
+
+            // Step 5: Send the comment to the backend
             const response = await axios.post("http://localhost:5000/api/comments/add_comment", {
                 ...tempComment,
-                city: cityName, // Send actual city to backend
+                city: cityName, // Use actual city
             });
 
-            // Step 6: Replace temporary comment with actual database response
+            // Step 6: Replace temporary comment with backend response
             setComments((prevComments) =>
                 prevComments.map((comment) =>
                     comment._id === tempId ? response.data : comment
                 )
             );
+
         } catch (error) {
             console.error("Error submitting comment:", error);
-            // Remove temp comment if API fails
+            // Remove temporary comment if submission fails
             setComments((prevComments) => prevComments.filter((c) => c._id !== tempId));
         }
     };
+
 
 
     const translateComment = async (commentId, text, targetLang) => {
@@ -209,23 +218,42 @@ const CommentSection = ({ videoId }) => {
             <h3 className="text-primary">Comment Section</h3>
 
             {user ? (
-                <div className="mb-3">
-                    <textarea
+                // <div className="mb-3">
+                //     <input
+                //         type="text"
+                //         className="form-control"
+                //         rows="3"
+                //         value={newComment}
+                //         onChange={(e) => setNewComment(e.target.value)}
+                //         placeholder="Write a comment..."
+                //         // pattern with no special characters
+                //         pattern="^[a-zA-Z0-9 ]*$"
+                //     />
+                //     <button className="btn btn-primary mt-2" onClick={handleCommentSubmit}>Submit</button>
+                // </div>
+
+                <form className="mb-3" onSubmit={handleCommentSubmit}>
+                    <input
+                        type="text"
                         className="form-control"
                         rows="3"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder="Write a comment..."
+                        // pattern with no special characters
+                        pattern="^[a-zA-Z0-9 ]*$"
                     />
-                    <button className="btn btn-primary mt-2" onClick={handleCommentSubmit}>Submit</button>
-                </div>
+                    <button className="btn btn-primary mt-2" type="submit">
+                        Submit
+                    </button>
+                </form>
             ) : (
                 <p className="text-danger">Login to post a comment.</p>
             )}
 
-            <div className="list-group">
+            <div className="list-group overflow-y-scroll" style={{height:"40dvh"}}>
                 {comments.map((comment) => (
-                    <div key={comment._id} className="list-group-item">
+                    <div key={comment._id} className="list-group-item mt-2 ">
                         <div className="d-flex justify-content-between align-items-center">
                             <div>
                                 <p className="mb-1"><strong>{comment.username}:</strong> {translatedComments[comment._id] || comment.text}</p>
