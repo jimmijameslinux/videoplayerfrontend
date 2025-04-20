@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 import {getUserLocation} from "../../utility/getLocation"; // Adjust the import path as necessary
+import gpath from "../../utility/globalPath"; // Adjust the import path
 
 const languages = [
     { code: 'en', label: 'English' },
@@ -45,7 +46,7 @@ const CommentSection = ({ videoId }) => {
     const fetchComments = async () => {
         try {
             // console.log("Fetching comments for videoId:", videoId);
-            const response = await axios.get(`http://localhost:5000/api/comments/get_comments/${videoId}`);
+            const response = await axios.get(`${gpath}/api/comments/get_comments/${videoId}`);
             // console.log("Response data:", response.data);
             setComments(response.data);
             // console.log("Fetched comments:", response.data);

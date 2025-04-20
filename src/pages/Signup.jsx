@@ -5,6 +5,7 @@ import axios from "axios";
 import "../pages/Signup.css"; // Import your CSS file
 import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
 import { AuthContext } from "../context/AuthContext"; // Import AuthContext if needed
+import gpath from "../utility/globalPath";
 
 const Signup = () => {
     const [username, setUsername] = useState("");
@@ -42,7 +43,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             if (phone && southIndiaStates.includes(authcontextlocation)) {
-                await axios.post("http://localhost:5000/api/auth/signup-phone", {
+                await axios.post(`${gpath}/api/auth/signup-phone`, {
                     username,
                     email,
                     password,
@@ -54,7 +55,7 @@ const Signup = () => {
 
                 navigate("/verify-otp", { state: { email, phone: `+91${phone}`, locationData } });
             } else {
-                await axios.post("http://localhost:5000/api/auth/signup", {
+                await axios.post(`${gpath}/api/auth/signup`, {
                     username,
                     email,
                     password,

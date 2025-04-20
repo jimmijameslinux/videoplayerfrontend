@@ -5,6 +5,7 @@ import CommentSection from "../Comments/CommentSection";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import "./VideoPlayer.css";
+import gpath from "../../utility/globalPath";
 
 const VideoPlayer = ({ setDisablepricing }) => {
   const { id } = useParams(); // Fix: Use id instead of videoId
@@ -35,7 +36,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5000/api/videos/${id}`, {
+      .get(`${gpath}/api/videos/${id}`, {
         params: { userId: user?.userId }
       })
       .then((response) => {
@@ -179,7 +180,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
     }
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/upload/download/${id}`,
+        `${gpath}/api/upload/download/${id}`,
         { userId: user._id }  // sending userId in the request body
       );
       setMessage("");

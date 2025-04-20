@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import gpath from '../utility/globalPath';
 
 const AdminDashboard = () => {
   const [title, setTitle] = useState('');
@@ -20,15 +21,16 @@ const AdminDashboard = () => {
   const {admin} = useContext(AuthContext);
   const navigate = useNavigate();
 
+
  
 console.log(admin)
   const fetchVideos = async () => {
-    const res = await axios.get('http://localhost:5000/api/videos');
+    const res = await axios.get(`${gpath}/api/videos`);
     setVideos(res.data);
   };
 
   const fetchUsers = async () => {
-    const res = await axios.get('http://localhost:5000/api/admin/videos/users');
+    const res = await axios.get(`${gpath}/api/admin/videos/users`);
     setUsers(res.data);
   };
 
@@ -62,7 +64,7 @@ console.log(admin)
     formData.append('video', videoFile);
 
     try {
-      await axios.post('http://localhost:5000/api/upload', formData, {
+      await axios.post(`${gpath}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       console.log(formData);
@@ -85,7 +87,7 @@ console.log(admin)
     if (!window.confirm('Are you sure you want to delete this video?')) return;
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:5000/api/admin/videos/delete/${id}`);
+      await axios.delete(`${gpath}/api/admin/videos/delete/${id}`);
       setVideos(videos.filter(v => v._id !== id));
     } catch (err) {
       console.error(err);
@@ -104,7 +106,7 @@ console.log(admin)
   const handleEditSubmit = async () => {
     setEditing(true);
     try {
-      const res = await axios.put(`http://localhost:5000/api/admin/videos/update/${editVideo._id}`, {
+      const res = await axios.put(`${gpath}/api/admin/videos/update/${editVideo._id}`, {
         title: updatedTitle,
         description: updatedDesc
       });
@@ -154,7 +156,7 @@ console.log(admin)
         {videos.map(video => (
           <div className="col-md-4 mb-4" key={video._id}>
             <div className="card h-100 shadow-sm">
-              <img src={`http://localhost:5000${video.thumbnail}`} className="card-img-top" alt={video.title} />
+              <img src={`${gpath}${video.thumbnail}`} className="card-img-top" alt={video.title} />
               <div className="card-body">
                 <h5 className="card-title">{video.title}</h5>
                 <p className="card-text">{video.description}</p>

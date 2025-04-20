@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
+import gpath from "../utility/globalPath";
 
 const OtpVerification = () => {
     const location = useLocation();
@@ -44,9 +45,9 @@ const OtpVerification = () => {
         try {
             if (phone) {
                 console.log("Phone and location data provided:", phone, otp);
-                await axios.post("http://localhost:5000/api/auth/verify-otp-phone", {phone, otp });
+                await axios.post(`${gpath}/api/auth/verify-otp-phone`, {phone, otp });
             } else {
-                await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
+                await axios.post(`${gpath}/api/auth/verify-otp`, { email, otp });
             }
             localStorage.removeItem("signupEmail");
             navigate("/login");
@@ -57,7 +58,7 @@ const OtpVerification = () => {
 
     const handleResend = async () => {
         try {
-            await axios.post("http://localhost:5000/api/auth/resend-otp", { email });
+            await axios.post(`${gpath}/api/auth/resend-otp`, { email });
             setResendStatus("OTP resent to your email.");
             setError("");
         } catch (err) {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Home.css"; // Import your custom CSS file for styling
+import gpath from "../utility/globalPath";
 
 
 // user context
@@ -17,7 +18,7 @@ const Home = () => {
     const [dataloaded, setDataloaded] = useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/videos")
+        axios.get(`${gpath}/api/videos`)
             .then(response => {
                 console.log("Videos fetched:", response.data);
                 setVideos(response.data);
@@ -121,7 +122,7 @@ const Home = () => {
                                         backgroundColor: isDownloaded ? "#1a1a2e" : "#212529"  // or change bg color
                                     }}
                                 >
-                                    <img src={`http://localhost:5000${video.thumbnail}`} height={"100%"} className="card-img-top" alt={video.title} />
+                                    <img src={`${gpath}${video.thumbnail}`} height={"100%"} className="card-img-top" alt={video.title} />
                                     <div className="card-body mt-4">
                                         <h5 className="card-title text-white">{video.title}</h5>
                                         <p className="card-text text-truncate text-white">{video.description}</p>

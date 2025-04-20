@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import gpath from '../utility/globalPath';
 
 const AdminLogin = () => {
     const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ const AdminLogin = () => {
         setIsSuccess(false);
 
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/adminlogin', {
+            const res = await axios.post(`${gpath}/api/auth/adminlogin`, {
                 email: email.trim(),
                 password: password.trim(),
             });

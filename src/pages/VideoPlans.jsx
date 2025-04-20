@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import Payment from "./Payment"; // Adjust the import path as necessary
+import gpath from "../utility/globalPath";
 
 const VideoPlans = ({ onPlanSelect }) => {
     const [selectedPlan, setSelectedPlan] = useState("Free");
@@ -34,7 +35,7 @@ const VideoPlans = ({ onPlanSelect }) => {
             console.log("User", user);
             console.log("Updating plan for user:", user._id, "to", selectedPlan);
             console.log("Selected plan:", selectedPlan);
-            const response = await axios.patch("http://localhost:5000/api/user/update_plan", {
+            const response = await axios.patch(`${gpath}/api/user/update_plan`, {
                 userId: user._id,
                 newPlan: selectedPlan,
             });

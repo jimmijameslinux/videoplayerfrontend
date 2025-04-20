@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import gpath from "../utility/globalPath";
 
 const UserProfile = () => {
     const { user } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const UserProfile = () => {
         const fetchDownloads = async () => {
             console.log("Fetching downloads for user:", user._id);
             try {
-                const res = await axios.get(`http://localhost:5000/api/user/downloads?userId=${user._id}`);
+                const res = await axios.get(`${gpath}/api/user/downloads?userId=${user._id}`);
                 setDownloads(res.data);
                 setDataloaded(true);
                 console.log("Downloads fetched:", res.data);
@@ -39,7 +40,7 @@ const UserProfile = () => {
             console.log("Deleting video with ID:", videoId);
             console.log("User id", user._id);
             const userId = user._id;
-            const res = await axios.delete(`http://localhost:5000/api/user/downloads/${userId}/${videoId}`, {
+            const res = await axios.delete(`${gpath}/api/user/downloads/${userId}/${videoId}`, {
                 // userId: user._id,
             });
             console.log(res)
@@ -54,7 +55,7 @@ const UserProfile = () => {
 
     const handleEndPlan = async () => {
         try {
-            const res = await axios.patch("http://localhost:5000/api/user/end_plan", {
+            const res = await axios.patch(`${gpath}/api/user/end_plan`, {
                 userId: user._id,
                 newPlan: "Free",
             });
@@ -95,7 +96,7 @@ const UserProfile = () => {
                                     borderRadius: 10
                                 }}>
                                     <img
-                                        src={`http://localhost:5000${video.thumbnail}`}
+                                        src={`${gpath}${video.thumbnail}`}
                                         // height={"100%"}
                                         className="card-img-top"
                                         alt={video.title}

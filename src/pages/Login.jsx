@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import gpath from "../utility/globalPath";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+            const response = await axios.post(`${gpath}/api/auth/login`, { email, password });
             // const userWithId = {
             //     ...response.data.user,
             //     userId: response.data.user._id,

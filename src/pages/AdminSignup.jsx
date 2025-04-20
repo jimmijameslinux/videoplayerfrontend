@@ -1,5 +1,6 @@
 import React, { useState,useContext } from 'react';
 import axios from 'axios';
+import gpath from '../utility/globalPath';
 
 const AdminSignup = () => {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const AdminSignup = () => {
         setMsg('Creating account...');
 
         try {
-            await axios.post('http://localhost:5000/api/auth/adminsignup', {
+            await axios.post(`${gpath}/api/auth/adminsignup`, {
                 email: email.trim(),
                 password: password.trim(),
             });
