@@ -53,7 +53,7 @@ const Signup = () => {
 
                 // Pass email to OTP page via state
 
-                navigate("/verify-otp", { state: { email, phone, authcontextlocation } });
+                navigate("/verify-otp", { state: { email, phone:`${countryCode}${phone}`, authcontextlocation } });
             } else {
                 await axios.post(`${gpath}/api/auth/signup`, {
                     username,
