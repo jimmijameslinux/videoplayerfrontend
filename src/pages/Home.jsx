@@ -15,14 +15,14 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const { user } = useContext(AuthContext);
     const [sortOption, setSortOption] = useState("title-asc");
-    const [dataloaded, setDataloaded] = useState(false);
+    // const [dataloaded, setDataloaded] = useState(false);
 
     useEffect(() => {
         axios.get(`${gpath}/api/videos`)
             .then(response => {
                 console.log("Videos fetched:", response.data);
                 setVideos(response.data);
-                setDataloaded(true);
+                // setDataloaded(true);
                 setLoading(false);
             })
             .catch(error => {

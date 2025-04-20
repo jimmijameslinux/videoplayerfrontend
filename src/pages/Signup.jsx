@@ -1,9 +1,9 @@
 // Signup.js
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../pages/Signup.css"; // Import your CSS file
-import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
+// import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
 import { AuthContext } from "../context/AuthContext"; // Import AuthContext if needed
 import gpath from "../utility/globalPath";
 
@@ -15,9 +15,9 @@ const Signup = () => {
     const [countryCode, setCountryCode] = useState("+91");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
-    const [locationData, setLocationData] = useState(null); // State to store location data
+    // const [locationData, setLocationData] = useState(null); // State to store location data
     const { authcontextlocation } = useContext(AuthContext); // Get user from context if needed
 
     const southIndiaStates = ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh", "Telangana"];
@@ -48,12 +48,12 @@ const Signup = () => {
                     email,
                     password,
                     phone: `${countryCode}${phone}`,
-                    locationData
+                    authcontextlocation
                 });
 
                 // Pass email to OTP page via state
 
-                navigate("/verify-otp", { state: { email, phone: `+91${phone}`, locationData } });
+                navigate("/verify-otp", { state: { email, phone, authcontextlocation } });
             } else {
                 await axios.post(`${gpath}/api/auth/signup`, {
                     username,
@@ -70,7 +70,7 @@ const Signup = () => {
         }
     };
 
-    console.log("Location Data:", locationData);
+    console.log("Location Data:", authcontextlocation);
 
     return (
         <div className={`container d-flex justify-content-center align-items-center w-100 flex-column vh-100 pb-5 overflow-hidden`}>

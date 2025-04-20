@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
-import {getUserLocation} from "../../utility/getLocation"; // Adjust the import path as necessary
+// import {getUserLocation} from "../../utility/getLocation"; // Adjust the import path as necessary
 import gpath from "../../utility/globalPath"; // Adjust the import path
 
 const languages = [
@@ -39,10 +39,7 @@ const CommentSection = ({ videoId }) => {
     const [newComment, setNewComment] = useState('');
     const [translatedComments, setTranslatedComments] = useState({});
     const [userLocation, setUserLocation] = useState(''); // Tracks user location
-    useEffect(() => {
-        fetchComments();
-    }, [videoId]);
-
+    
     const fetchComments = async () => {
         try {
             // console.log("Fetching comments for videoId:", videoId);
@@ -54,7 +51,10 @@ const CommentSection = ({ videoId }) => {
             console.error("Error fetching comments:", error);
         }
     };
-
+    useEffect(() => {
+        fetchComments();
+    }, [videoId]); // Fetch comments when videoId or userLocation changes
+    
     // Get user location (City)
     const getUserLocation = async () => {
         return new Promise((resolve, reject) => {

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import gpath from "../utility/globalPath";
@@ -10,7 +10,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
-    const location = useLocation();
+    // const location = useLocation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();

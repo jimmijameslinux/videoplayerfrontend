@@ -28,7 +28,7 @@ function App() {
 
   // setTheme("light");
 
- 
+ console.log(plan)
   useEffect(() => {
     const checkTimeAndLocation = async () => {
       const currentHour = new Date().getHours();

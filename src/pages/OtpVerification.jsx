@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
+// import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
 import gpath from "../utility/globalPath";
 
 const OtpVerification = () => {
@@ -16,7 +16,7 @@ const OtpVerification = () => {
 
     const email = location.state?.email || localStorage.getItem("signupEmail") || "";
     const phone = location.state?.phone || localStorage.getItem("signupPhone") || "";
-    const locationData = location.state?.locationData || localStorage.getItem("signupLocation") || "";
+    // const locationData = location.state?.locationData || localStorage.getItem("signupLocation") || "";
 
     // console.log(phone)
 

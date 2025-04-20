@@ -26,6 +26,7 @@ const VideoPlans = ({ onPlanSelect }) => {
         setClicked(null); // Set clicked to true when a plan is selected
     };
 
+
     const OnSuccess = async (res) => {
         
         console.log("Payment response:", res);
@@ -64,7 +65,7 @@ const VideoPlans = ({ onPlanSelect }) => {
     
     <div className="row justify-content-center g-5">
         {   Object.keys(plans)?.map((plan) => {
-            const isSelected = plan === user?.plan;
+            // const isSelected = plan === user?.plan;
             const planData = plans[plan];
             return (
                 <div key={plan} className="col-md-4">
