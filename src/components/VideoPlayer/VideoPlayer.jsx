@@ -244,7 +244,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
         <div className="video-container" onClick={handleGesture}>
           <ReactPlayer
             ref={playerRef}
-            url={videoData.qualities[quality]}
+            url={`${gpath}${videoData.qualities[quality]}`}
             controls
             playing={isPlaying}
             width="100%"
