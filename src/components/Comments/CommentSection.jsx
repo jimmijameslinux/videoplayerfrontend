@@ -211,6 +211,12 @@ const CommentSection = ({ videoId }) => {
         }
     };
 
+    // convert timestamp to local time
+    const convertToLocalTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString(); // Adjust format as needed
+    };
+
 
 
     return (
@@ -257,7 +263,7 @@ const CommentSection = ({ videoId }) => {
                         <div className="d-flex justify-content-between align-items-center">
                             <div>
                                 <p className="mb-1"><strong>{comment.username}:</strong> {translatedComments[comment._id] || comment.text}</p>
-                                <small className="text-muted">{comment.timestamp}</small>
+                                <small className="text-muted">{convertToLocalTime(comment.timestamp)}</small>
                             </div>
 
                             <select
