@@ -30,11 +30,12 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">Home</Link>
                             </li>
-                            {/* {user?.plan==="Free" &&( */}
+                            {/* if user doesnt exist or */}
+                            {!user || user && user?.plan==="Free" && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/plans">Pricing</Link>
                                 </li>
-                            {/* )} */}
+                            )}
                             {!user ? (
                                 <>
                                     <li className="nav-item">
