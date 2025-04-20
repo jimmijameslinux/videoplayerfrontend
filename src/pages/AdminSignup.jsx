@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import gpath from '../utility/globalPath';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const AdminSignup = () => {
     const [email, setEmail] = useState('');
@@ -9,6 +9,7 @@ const AdminSignup = () => {
     const [confirm, setConfirm] = useState('');
     const [msg, setMsg] = useState('');
     const [isSuccess, setIsSuccess] = useState(false);
+    const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -29,6 +30,8 @@ const AdminSignup = () => {
 
             setMsg('Signup successful! You can now login.');
             setIsSuccess(true);
+            navigate('/adminlogin'); // Redirect to login page after successful signup
+
         } catch (error) {
             if (error.response && error.response.data.message) {
                 setMsg(error.response.data.message);
