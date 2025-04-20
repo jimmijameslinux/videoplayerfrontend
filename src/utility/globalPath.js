@@ -1,2 +1,2 @@
-const gpath = 'http://localhost:5000';
+const gpath = 'https://videoplayerbackend-cby7.onrender.com';
 export default gpath;
