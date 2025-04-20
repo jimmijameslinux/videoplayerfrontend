@@ -170,6 +170,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
       return;
     }
 
+
     // check if user has already downloaded the video in the last 24 hours
     const currentTime = new Date().getTime();
     const lastDownloadedTime = user.lastDownloadDate;

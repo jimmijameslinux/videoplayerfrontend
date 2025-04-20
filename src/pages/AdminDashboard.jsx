@@ -77,6 +77,7 @@ console.log(admin)
     } catch (err) {
       alert("Upload failed");
       console.error(err.message);
+      // console.log(err.response.details)
       setError(err.response ? err.response.data.message : 'Upload failed');
     } finally {
       setUploading(false);
