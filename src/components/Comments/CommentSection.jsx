@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect,useCallback  } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
@@ -40,7 +40,7 @@ const CommentSection = ({ videoId }) => {
     const [translatedComments, setTranslatedComments] = useState({});
     const [userLocation, setUserLocation] = useState(''); // Tracks user location
     
-    const fetchComments = async () => {
+    const fetchComments =useCallback ( async () => {
         try {
             // console.log("Fetching comments for videoId:", videoId);
             const response = await axios.get(`${gpath}/api/comments/get_comments/${videoId}`);
@@ -50,10 +50,10 @@ const CommentSection = ({ videoId }) => {
         } catch (error) {
             console.error("Error fetching comments:", error);
         }
-    };
+    }, [videoId]);
     useEffect(() => {
         fetchComments();
-    }, [videoId]); // Fetch comments when videoId or userLocation changes
+    }, [fetchComments]); // Fetch comments when videoId or userLocation changes
     
     // Get user location (City)
     const getUserLocation = async () => {

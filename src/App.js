@@ -51,7 +51,7 @@ function App() {
       }
     };
     checkTimeAndLocation();
-  }, []);
+  }, [setUserLocation]);
 
   // Function to handle the selection of a plan
   const onPlanSelect = (selectedPlan) => {
