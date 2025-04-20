@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import {getUserLocation} from "../../utility/getLocation"; // Adjust the import path as necessary
 
 const languages = [
     { code: 'en', label: 'English' },
@@ -37,8 +38,6 @@ const CommentSection = ({ videoId }) => {
     const [newComment, setNewComment] = useState('');
     const [translatedComments, setTranslatedComments] = useState({});
     const [userLocation, setUserLocation] = useState(''); // Tracks user location
-    // const [userInteractions, setUserInteractions] = useState({}); // Tracks user likes/dislikes
-
     useEffect(() => {
         fetchComments();
     }, [videoId]);
@@ -251,7 +250,7 @@ const CommentSection = ({ videoId }) => {
                 <p className="text-danger">Login to post a comment.</p>
             )}
 
-            <div className="list-group overflow-y-scroll" style={{height:"40dvh"}}>
+            <div className="list-group overflow-y-auto" style={{height:"40dvh"}}>
                 {comments.map((comment) => (
                     <div key={comment._id} className="list-group-item mt-2 ">
                         <div className="d-flex justify-content-between align-items-center">

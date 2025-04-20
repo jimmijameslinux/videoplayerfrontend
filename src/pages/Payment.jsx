@@ -1,10 +1,16 @@
-import React from "react";
+import React,{useContext} from "react";
+import { AuthContext } from "../context/AuthContext";
 // import { useNavigate } from "react-router-dom";
 import logo from "./logo192.png"; // Replace with your logo path
 
 const Payment = ({ amount, plan, onSuccess }) => {
     // const navigate = useNavigate();
+    const { user } = useContext(AuthContext); // Access user from context
 
+    if (!user) {
+        alert("You need to log in first!");
+        return;
+    }
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
             const script = document.createElement("script");

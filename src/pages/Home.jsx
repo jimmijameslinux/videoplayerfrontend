@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Home.css"; // Import your custom CSS file for styling
 
+
 // user context
 import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
 
 const Home = () => {
     const [videos, setVideos] = useState([]);
@@ -61,7 +61,7 @@ const Home = () => {
 
 
     return (
-        <div className={`container ${dataloaded ? "" : "vh-100"}`}>
+        <div className={`container vh-100`}>
             <h2 className="mb-4 text-center pt-4">🎬 NullClass Video Library</h2>
 
             <div className="mb-4 d-flex">

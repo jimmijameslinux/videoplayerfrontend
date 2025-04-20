@@ -158,11 +158,25 @@ const VideoPlayer = ({ setDisablepricing }) => {
     }
 
     // user can download only one video in a day if user is not Gold
-    if (user.plan !== "Gold") {
-      setMessage("You can only download one video per day. Upgrade to Gold for unlimited downloads.");
+    // if (user.plan !== "Gold") {
+    //   setMessage("You can only download one video per day. Upgrade to Gold for unlimited downloads.");
+    //   return;
+    // }
+
+    // check if user has already downloaded the video
+    if (hasDownloaded) {
+      setMessage("You have already downloaded this video.");
       return;
     }
 
+    // check if user has already downloaded the video in the last 24 hours
+    const currentTime = new Date().getTime();
+    const lastDownloadedTime = user.lastDownloadDate;
+    console.log("Last Downloaded Time:", lastDownloadedTime);
+    if (lastDownloadedTime && currentTime - lastDownloadedTime < 24 * 60 * 60 * 1000 && user.plan!=="Gold") {
+      setMessage("You can only download one video every 24 hours. Please try again later.");
+      return;
+    }
     try {
       const res = await axios.post(
         `http://localhost:5000/api/upload/download/${id}`,

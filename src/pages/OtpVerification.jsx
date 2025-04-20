@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
 
 const OtpVerification = () => {
     const location = useLocation();
@@ -11,8 +12,12 @@ const OtpVerification = () => {
     const [resendStatus, setResendStatus] = useState("");
     const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
     const [isExpired, setIsExpired] = useState(false);
-    const email = location.state?.email || localStorage.getItem("signupEmail") || "";
 
+    const email = location.state?.email || localStorage.getItem("signupEmail") || "";
+    const phone = location.state?.phone || localStorage.getItem("signupPhone") || "";
+    const locationData = location.state?.locationData || localStorage.getItem("signupLocation") || "";
+
+    // console.log(phone)
 
     useEffect(() => {
         if (!email) {
@@ -35,8 +40,14 @@ const OtpVerification = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Phone:", phone);
         try {
-            await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
+            if (phone) {
+                console.log("Phone and location data provided:", phone, otp);
+                await axios.post("http://localhost:5000/api/auth/verify-otp-phone", {phone, otp });
+            } else {
+                await axios.post("http://localhost:5000/api/auth/verify-otp", { email, otp });
+            }
             localStorage.removeItem("signupEmail");
             navigate("/login");
         } catch (err) {
@@ -46,7 +57,7 @@ const OtpVerification = () => {
 
     const handleResend = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/resend-otp", { email });
+            await axios.post("http://localhost:5000/api/auth/resend-otp", { email });
             setResendStatus("OTP resent to your email.");
             setError("");
         } catch (err) {
@@ -84,16 +95,16 @@ const OtpVerification = () => {
                     />
                 </div>
                 <div className="mb-3 d-flex align-items-center justify-content-center">
-                <button className="btn btn-primary" type="submit">
-                    Verify
-                </button>
-                <button
-                    type="button"
-                    className="btn ms-3"
-                    onClick={handleResend}
-                >
-                    Resend OTP
-                </button>
+                    <button className="btn btn-primary" type="submit">
+                        Verify
+                    </button>
+                    <button
+                        type="button"
+                        className="btn ms-3"
+                        onClick={handleResend}
+                    >
+                        Resend OTP
+                    </button>
                 </div>
             </form>
         </div>

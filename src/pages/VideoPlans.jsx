@@ -13,10 +13,10 @@ const VideoPlans = ({ onPlanSelect }) => {
     const [clicked, setClicked] = useState(false);
 
     const plans = {
-        Free: { name: "Free", timeLimit: "5 mins", cost: 0 },
-        Bronze: { name: "Bronze", timeLimit: "7 mins", cost: 10 },
-        Silver: { name: "Silver", timeLimit: "10 mins", cost: 50 },
-        Gold: { name: "Gold", timeLimit: "Unlimited", cost: 100 },
+        Free: { name: "Free", timeLimit: "5 mins", cost: 0, download_per_day:1 },
+        Bronze: { name: "Bronze", timeLimit: "7 mins", cost: 10, download_per_day:1 },
+        Silver: { name: "Silver", timeLimit: "10 mins", cost: 50, download_per_day:1 },
+        Gold: { name: "Gold", timeLimit: "Unlimited", cost: 100, download_per_day:"Unlimited" },
     };
 
     const handlePlanSelection = (plan) => {
@@ -26,11 +26,7 @@ const VideoPlans = ({ onPlanSelect }) => {
     };
 
     const OnSuccess = async (res) => {
-        if (!user) {
-            alert("You need to log in first!");
-            return;
-        }
-
+        
         console.log("Payment response:", res);
 
         try {
@@ -66,34 +62,40 @@ const VideoPlans = ({ onPlanSelect }) => {
     <h2 className="text-center fw-bold mb-5 display-6 text-primary">Upgrade Your Plan</h2>
     
     <div className="row justify-content-center g-5">
-        {   Object.keys(plans).map((plan) => {
-            const isSelected = plan === user.plan;
+        {   Object.keys(plans)?.map((plan) => {
+            const isSelected = plan === user?.plan;
             const planData = plans[plan];
             return (
                 <div key={plan} className="col-md-4">
-                    <div className={`card h-100 shadow-lg border-0 ${isSelected ? "border border-primary" : ""}`}>
-                        <div className={`card-header bg-${isSelected ? "primary" : "light"} text-${isSelected ? "white" : "dark"} text-center`}>
+                    <div className={`card h-100 shadow-lg border-0 ${plan === "Free" ? "border border-primary" : ""}`}>
+                        <div className={`card-header bg-${plan === "Free" ? "primary" : "light"} text-${plan === "Free" ? "white" : "dark"} text-center`}>
                             <h4 className="mb-0">{planData.name}</h4>
                         </div>
                         <div className="card-body text-center">
                             <span className="badge bg-info mb-3">{plan === "Free" ? "Free Forever" : "Premium Access"}</span>
                             <p className="card-text fs-6"><strong>Time Limit:</strong> {planData.timeLimit}</p>
                             <p className="card-text fs-6"><strong>Cost:</strong> {planData.cost === 0 ? "₹0" : `₹${planData.cost}`}</p>
+                            <p className="card-text fs-6"><strong>Downloads per day:</strong> {planData.download_per_day}</p>
                             <button
-                                className={`btn ${isSelected ? "btn-primary" : "btn-outline-primary"} w-100 my-2`}
+                                className={`btn ${plan === "Free" ? "btn-primary" : "btn-outline-primary"} w-100 my-2`}
                                 onClick={() =>{ handlePlanSelection(plan)
                                     if(plan !== "Free") setClicked(plan); // Set clicked to true when a plan is selected
                                 }}
                                 
                             >
-                                {isSelected ? "Plan Selected" : `Choose ${planData.name}`}
+                                {plan === "Free" ? "Plan Selected" : `Choose ${planData.name}`}
                             </button>
                             {clicked === plan && plan !== "Free" && (
                                 <Payment
                                     amount={planData.cost}
                                     plan={plan}
                                     onSuccess={()=> OnSuccess()}
-                                    setClicked={() => setClicked(null)} // Reset clicked state after payment
+                                    setClicked={() => 
+                                    {
+                                        setClicked(null)
+                                        setSelectedPlan(plan); // Set selected plan to the one clicked
+                                    }
+                                    } // Reset clicked state after payment
                                 />
                               )}
                         </div>

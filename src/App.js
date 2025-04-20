@@ -4,44 +4,54 @@ import VideoPlayer from './components/VideoPlayer/VideoPlayer';
 import VideoPlans from './pages/VideoPlans';
 import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
-import React, { useState} from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 // import axios from 'axios';
 import Navbar from './components/Navbar/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import AuthProvider from './context/AuthContext';
 import OtpVerification from './pages/OtpVerification';
 import UserProfile from './pages/UserProfile';
 import AdminLogin from './pages/AdminLogin';
 import AdminSignup from './pages/AdminSignup';
 import Payment from './pages/Payment';
+import {getUserLocation} from "./utility/getLocation"; // Adjust the import path as necessary
+import { AuthContext } from './context/AuthContext'; // Import AuthContext if needed
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+
 
 function App() {
   const [plan, setPlan] = useState("Free"); // Default plan is Free
   const [theme, setTheme] = useState("dark"); // Default theme is light
+  const [loading, setLoading] = useState(true); // <-- new loading state
+  const { setUserLocation } = useContext(AuthContext); // Set user location from context
 
   // setTheme("light");
 
-  // useEffect(() => {
-  //   const checkTimeAndLocation = async () => {
-  //     const currentHour = new Date().getHours();
-  //     try {
-  //       const response = await axios.get("https://ipapi.co/json/");
-  //       const state = response.data.region;
-  //       const southIndiaStates = ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh", "Telangana"];
+ 
+  useEffect(() => {
+    const checkTimeAndLocation = async () => {
+      const currentHour = new Date().getHours();
+      try {
+        const location = await getUserLocation(); // Get the user's location
+        setUserLocation(location); //
+        const southIndiaStates = ["Tamil Nadu", "Kerala", "Karnataka", "Andhra Pradesh", "Telangana"];
+        console.log("Current Hour:", currentHour);
+        console.log("User State:", location);
 
-  //       if ((currentHour >= 10 && currentHour < 12) && southIndiaStates.includes(state)) {
-  //         setTheme("light");
-  //       } else {
-  //         setTheme("dark");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching location:", error);
-  //       setTheme("dark"); // Default to dark theme in case of an error
-  //     }
-  //   };
-  //   checkTimeAndLocation();
-  // }, []);
+        if ((currentHour >= 10 && currentHour < 12) && southIndiaStates.includes(location)) {
+          setTheme("light");
+        } else {
+          setTheme("dark");
+        }
+        setLoading(false); // Set loading to false after fetching location
+      } catch (error) {
+        console.error("Error fetching location:", error);
+        setTheme("dark"); // Default to dark theme in case of an error
+      }
+    };
+    checkTimeAndLocation();
+  }, []);
 
   // Function to handle the selection of a plan
   const onPlanSelect = (selectedPlan) => {
@@ -51,10 +61,21 @@ function App() {
 
   const [disablepricing, setDisablepricing] = useState(false);
 
+  if (loading) {
+    return (
+      <div className="d-flex flex-column vh-100 justify-content-center align-items-center bg-dark text-white">
+        <h2>Loading your experience...</h2>
+        <div className="spinner-border text-light ms-3" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`${theme === "light" ? "light-theme" : "dark-theme"} container-fluid w-100`}>
     {/* <div className={`text-white ${isDarkMode ? 'bg-dark' : 'bg-light'}`}> */}
-      <AuthProvider>
+      {/* <AuthProvider> */}
         <Router>
           <Navbar disablepricing={disablepricing} theme={theme} setTheme={setTheme} />
           <Routes>
@@ -78,7 +99,7 @@ function App() {
              <Route path="/profile" element={<UserProfile />} />
           </Routes>
         </Router>
-      </AuthProvider>
+      {/* </AuthProvider> */}
     </div>
   );
 }

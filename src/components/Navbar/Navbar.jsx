@@ -15,6 +15,8 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
         navigate("/login");     // Redirect to login page
     };
 
+    // console.log("Navbar user:", user.plan);
+
    
 
     return (
@@ -28,11 +30,11 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">Home</Link>
                             </li>
-                            {!disablepricing && (
+                            {user?.plan!=="Free" && !user?(
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/plans">Pricing</Link>
                                 </li>
-                            )}
+                            ):""}
                             {!user ? (
                                 <>
                                     <li className="nav-item">
@@ -93,11 +95,11 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/">Home</Link>
                         </li>
-                        {!disablepricing && (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/plans">Pricing</Link>
-                            </li>
-                        )}
+                        {user?.plan!=="Free" && !user?(
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/plans">Pricing</Link>
+                                </li>
+                            ):""}
                         {!user ? (
                             <>
                                 <li className="nav-item">

@@ -17,14 +17,14 @@ body {
 .light-theme {
     background-color: #ffffff;
     color: #000000;
-    transition: background-color 0.3s, color 0.3s;
+    /* transition: background-color 0.3s, color 0.3s; */
   }
   
   /* Dark Theme */
   .dark-theme {
     background-color: #121212;
     color: #ffffff;
-    transition: background-color 0.3s, color 0.3s;
+    /* transition: background-color 0.3s, color 0.3s; */
   }
   
   /* Apply to all elements */
