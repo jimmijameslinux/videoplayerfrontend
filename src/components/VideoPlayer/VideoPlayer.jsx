@@ -40,11 +40,17 @@ const VideoPlayer = ({ setDisablepricing }) => {
         params: { userId: user?.userId }
       })
       .then((response) => {
-        setVideoData(response.data);
-        setHasDownloaded(response.data.hasDownloaded);
+        const data = response.data;
+        setVideoData(data);
+        setHasDownloaded(data.hasDownloaded);
+        console.log(response.data.qualities);
         setLoading(false);
-        // console.log("Video data fetched:", response.data);
-        // console.log("ID:", id);
+        console.log("Video data fetched:", response.data);
+        console.log("ID:", id);
+        const availableQualities = Object.keys(data.qualities);
+        if (!availableQualities.includes("720p")) {
+          setQuality(availableQualities[0]);
+        }
       })
       .catch((error) => {
         console.error("Error fetching video data:", error);
@@ -145,7 +151,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
     return <p className="text-center text-danger">{error}</p>;
   }
 
-  if (!videoData || !videoData.qualities || !videoData.qualities[quality]) {
+  if (!videoData || !videoData.qualities ) {
     return <p className="text-center text-muted">No video available.</p>;
   }
 
@@ -227,6 +233,9 @@ const VideoPlayer = ({ setDisablepricing }) => {
     // console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
   }
 
+
+  // fetch video qualities from server
+
   return (
     <div className="">
       <div className="container text-center pt-4">
@@ -260,7 +269,8 @@ const VideoPlayer = ({ setDisablepricing }) => {
               onChange={(e) => setQuality(e.target.value)}
               className="form-select w-auto d-inline-block"
             >
-              {["360p", "480p", "720p", "1080p"].map((q) => (
+              {
+                Object.keys(videoData.qualities).sort().map((q) => (
                 <option key={q} value={q}>{q}</option>
               ))}
             </select>

@@ -7,6 +7,7 @@ import gpath from '../utility/globalPath';
 const AdminDashboard = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [quality, setQuality] = useState('');
   const [videoFile, setVideoFile] = useState(null);
   const [videos, setVideos] = useState([]);
   const [editVideo, setEditVideo] = useState(null);
@@ -62,6 +63,7 @@ console.log(admin)
     formData.append('title', title);
     formData.append('description', description);
     formData.append('video', videoFile);
+    formData.append('quality', quality);
 
     try {
       await axios.post(`${gpath}/api/upload`, formData, {
@@ -72,6 +74,7 @@ console.log(admin)
       setTitle('');
       setDescription('');
       setVideoFile(null);
+      setQuality('');
       setShowUploadModal(false);
       fetchVideos();
     } catch (err) {
@@ -217,6 +220,70 @@ console.log(admin)
                     onChange={e => setVideoFile(e.target.files[0])}
                     required
                   />
+                  {/* checkbox the mutiple qualities like 360p,480p etc.. need to be converted */}
+                  <h6 className="mt-3">Select Quality:</h6>
+                  <div className="form-check mt-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="qualityCheck360p"
+                      
+                      onChange={e => setQuality(e.target.checked ? '360p' : '')}
+                    />
+                    <label className="form-check-label" htmlFor="qualityCheck360p">360p</label>
+                  </div>
+
+                  <div className="form-check mt-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="qualityCheck480p"
+                      onChange={e => setQuality(e.target.checked ? '480p' : '')}
+                    />
+                    <label className="form-check-label" htmlFor="qualityCheck480p">480p</label>
+                  </div>
+
+                  <div className="form-check mt-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="qualityCheck720p"
+                      onChange={e => setQuality(e.target.checked ? '720p' : '')}
+                    />
+                    <label className="form-check-label" htmlFor="qualityCheck720p">720p</label>
+                  </div>
+
+                  <div className="form-check mt-2">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="qualityCheck1080p"
+                      onChange={e => setQuality(e.target.checked ? '1080p' : '')}
+                    />
+                    <label className="form-check-label" htmlFor="qualityCheck1080p">1080p</label>
+                  </div>
+
+                  {/* all the above qulities checkbox together checked */}
+                  {/* <div className="form-check mt-2">
+                    <input
+
+                      type="checkbox"
+                      className="form-check-input"
+                      id='qualityCheckAll'
+                      onChange={e => {
+                        if (e.target.checked) {
+                          setQuality('360p, 480p, 720p, 1080p');
+                        } else {
+                          setQuality('');
+                        }
+                      }}
+                    />
+                    <label className="form-check-label" htmlFor="qualityCheckAll">All Qualities</label>
+                  </div> */}
+
+
+
+                  
                   {/* error message from backend */}
 
                   {error && <div className="alert alert-danger mt-2">{error}</div>}
