@@ -164,11 +164,24 @@ const VideoPlayer = ({ setDisablepricing }) => {
       return;
     }
 
+    const lastdown = user?.lastDownloadDate;
+    // current time in 2025-04-20T13:48:50.675+00:00 format
+    const currentTime = new Date().toISOString();
+
+    const diff = new Date(currentTime) - new Date(lastdown);
+    console.log("Current Time:", currentTime);
+    console.log("Last Download Time:", lastdown);
+    console.log("Difference:", diff);
+
+    // check if user has downloaded today
+    // if () {
+
+
     // user can download only one video in a day if user is not Gold
-    // if (user.plan !== "Gold") {
-    //   setMessage("You can only download one video per day. Upgrade to Gold for unlimited downloads.");
-    //   return;
-    // }
+    if ((user?.plan !== "Gold") && diff < 24 * 60 * 60 * 1000) {
+      setMessage("You can only download one video per day. Upgrade to Gold for unlimited downloads.");
+      return;
+    }
 
     // check if user has already downloaded the video
     if (hasDownloaded) {
@@ -177,14 +190,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
     }
 
 
-    // check if user has already downloaded the video in the last 24 hours
-    const currentTime = new Date().getTime();
-    const lastDownloadedTime = user.lastDownloadDate;
-    console.log("Last Downloaded Time:", lastDownloadedTime);
-    if (lastDownloadedTime && currentTime - lastDownloadedTime < 24 * 60 * 60 * 1000 && user.plan!=="Gold") {
-      setMessage("You can only download one video every 24 hours. Please try again later.");
-      return;
-    }
+    
     try {
       const res = await axios.post(
         `${gpath}/api/upload/download/${id}`,

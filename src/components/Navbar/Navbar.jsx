@@ -57,7 +57,7 @@ const Navbar = ({ disablepricing, theme, setTheme }) => {
                             )}
                             {/* adminlogin */}
                             <li className="nav-item">
-                                <Link className="nav-link" to="/adminlogin">Admin</Link>
+                                <Link className="nav-link" to="/admin">Admin</Link>
                             </li>
                         </ul>
                     </div>
@@ -125,6 +125,10 @@ const Navbar = ({ disablepricing, theme, setTheme }) => {
                                 </li>
                             </>
                         )}
+                        {/* adminlogin */}
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/admin">Admin</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
