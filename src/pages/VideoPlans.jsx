@@ -52,7 +52,7 @@ const VideoPlans = ({ onPlanSelect }) => {
             login(updatedUser); // Update user in context
             localStorage.setItem("user", JSON.stringify(updatedUser)); // Update user in local storage
             console.log("User updated in local storage:", updatedUser);
-            navigate(-1); // Navigate back
+            navigate("/"); // Navigate back
         } catch (error) {
             console.error("Error updating plan:", error);
             alert("Payment failed. Please try again.");

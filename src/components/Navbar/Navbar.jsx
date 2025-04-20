@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const Navbar = ({ disablepricing, theme,setTheme }) => {
+const Navbar = ({ disablepricing, theme, setTheme }) => {
     const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation(); // Get the current location
-    
+
     const handleLogout = () => {
         logout();               // Clear user from context/localStorage
         navigate("/login");     // Redirect to login page
@@ -17,7 +17,7 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
 
     // console.log("Navbar user:", user.plan);
 
-   
+
 
     return (
         <>
@@ -31,10 +31,10 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                                 <Link className="nav-link" to="/">Home</Link>
                             </li>
                             {((!user) || (user?.plan === "Free")) && (
-    <li className="nav-item">
-        <Link className="nav-link" to="/plans">Pricing</Link>
-    </li>
-)}
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/plans">Pricing</Link>
+                                </li>
+                            )}
 
                             {!user ? (
                                 <>
@@ -51,14 +51,14 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                                         <Link className="nav-link" to="/profile">{user.username}</Link>
                                     </li>
                                     <li className="nav-item">
-                                        <button className={`btn ms-2 ${theme==="light"?"btn-outline-dark":"btn-outline-light"}`} onClick={handleLogout}>Logout</button>
+                                        <button className={`btn ms-2 ${theme === "light" ? "btn-outline-dark" : "btn-outline-light"}`} onClick={handleLogout}>Logout</button>
                                     </li>
                                 </>
                             )}
                             {/* adminlogin */}
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/adminlogin">Admin</Link>
-                                </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/adminlogin">Admin</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
             <nav className={`navbar ${theme === "light" ? "light-theme" : "navbar-dark"} d-flex d-md-none`}>
                 <div className="container-fluid">
                     <button
-                        className={`btn text-dark me-2 ${theme==="light"?"btn-outline-light":"btn-outline-dark"} `}
+                        className={`btn text-dark me-2 ${theme === "light" ? "btn-outline-light" : "btn-outline-dark"} `}
                         type="button"
                         data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasNavbar"
@@ -81,7 +81,7 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
             </nav>
 
             <div
-                className={`offcanvas offcanvas-start ${theme==="light"?"bg-light":"bg-dark text-white"} d-md-none`}
+                className={`offcanvas offcanvas-start ${theme === "light" ? "bg-light" : "bg-dark text-white"} d-md-none`}
                 tabIndex="-1"
                 id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel"
@@ -100,11 +100,12 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                         <li className="nav-item">
                             <Link className="nav-link" to="/">Home</Link>
                         </li>
-                        {user?.plan!=="Free" && !user?(
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/plans">Pricing</Link>
-                                </li>
-                            ):""}
+                        {((!user) || (user?.plan === "Free")) && (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/plans">Pricing</Link>
+                            </li>
+                        )}
+
                         {!user ? (
                             <>
                                 <li className="nav-item">
@@ -120,7 +121,7 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                                     <Link className="nav-link" to="/profile">{user.username}</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <button className={`btn ${theme==="light"?"btn-outline-dark":"btn-outline-light"} mt-2`} onClick={logout}>Logout</button>
+                                    <button className={`btn ${theme === "light" ? "btn-outline-dark" : "btn-outline-light"} mt-2`} onClick={logout}>Logout</button>
                                 </li>
                             </>
                         )}
