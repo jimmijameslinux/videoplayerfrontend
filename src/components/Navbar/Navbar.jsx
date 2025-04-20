@@ -54,6 +54,10 @@ const Navbar = ({ disablepricing, theme,setTheme }) => {
                                     </li>
                                 </>
                             )}
+                            {/* adminlogin */}
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/adminlogin">Admin</Link>
+                                </li>
                         </ul>
                     </div>
                 </div>
