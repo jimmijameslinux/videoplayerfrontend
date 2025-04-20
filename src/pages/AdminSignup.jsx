@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import gpath from '../utility/globalPath';
+import { Link } from 'react-router-dom';
 
 const AdminSignup = () => {
     const [email, setEmail] = useState('');
@@ -75,7 +76,10 @@ const AdminSignup = () => {
                     Sign Up
                 </button>
                 <div className="text-center mt-3">
-                    <p>Already have an account? <a href="/adminlogin">Login</a></p>
+                    <p>Already have an account? 
+                            
+                            <Link to="/adminlogin">Login</Link>
+                    </p>
                 </div>
             </form>
         </div>

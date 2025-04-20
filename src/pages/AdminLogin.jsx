@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import gpath from '../utility/globalPath';
 
@@ -69,7 +69,9 @@ const AdminLogin = () => {
                     Login
                 </button>
                 <div className="text-center mt-3">
-                    <p>Don't have an account? <a href="/adminsignup">Sign Up</a></p>
+                    <p>Don't have an account? 
+                        <Link to="/adminsignup">Sign Up</Link>
+                    </p>
                 </div>
             </form>
         </div>

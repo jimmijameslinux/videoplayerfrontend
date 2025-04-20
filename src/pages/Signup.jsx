@@ -1,6 +1,6 @@
 // Signup.js
 import React, {useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../pages/Signup.css"; // Import your CSS file
 // import { getUserLocation } from "../utility/getLocation"; // Adjust the import path as necessary
@@ -221,7 +221,9 @@ const Signup = () => {
                     Signup
                 </button>
                 <div className="mt-3 text-center">
-                    <p>Already have an account? <a href="/login">Login</a></p>
+                    <p>Already have an account? 
+                            <Link to="/login">Login</Link>
+                    </p>
                 </div>
             </form>
         </div>

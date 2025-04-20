@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import gpath from "../utility/globalPath";
@@ -43,7 +43,9 @@ const Login = () => {
                 </div>
                 <button className="btn btn-primary w-100" type="submit">Login</button>
                 <div className="mt-3 text-center">
-                    <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+                    <p>Don't have an account? 
+                        <Link to="/signup">Sign Up</Link>
+                    </p>
                 </div>
             </form>
         </div>
