@@ -133,7 +133,7 @@ console.log(admin)
   }, [admin, navigate]);
 
   return (
-    <div className="container py-4">
+    <div className="container py-4 min-vh-100">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Admin Dashboard</h2>
         {/* admin name */}

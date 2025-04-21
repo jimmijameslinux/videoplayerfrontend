@@ -73,7 +73,7 @@ const Signup = () => {
     console.log("Location Data:", authcontextlocation);
 
     return (
-        <div className={`container d-flex justify-content-center align-items-center w-100 flex-column vh-100 pb-5 overflow-hidden`}>
+        <div className={`container d-flex justify-content-center align-items-center w-100 flex-column min-vh-100 pb-5 overflow-hidden`}>
             <h2>Signup</h2>
             {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={handleSubmit} className="w-50">

@@ -62,7 +62,7 @@ const Home = () => {
 
 
     return (
-        <div className={`container vh-100`}>
+        <div className={`container min-vh-100`}>
             <h2 className="mb-4 text-center pt-4">🎬 NullClass Video Library</h2>
 
             <div className="mb-4 d-flex">

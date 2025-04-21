@@ -9,7 +9,7 @@ const UserProfile = () => {
     const { login } = useContext(AuthContext);
     const [downloads, setDownloads] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [dataloaded, setDataloaded] = useState(false);
+    // const [dataloaded, setDataloaded] = useState(false);
     // console.log(user.userId)
     useEffect(() => {
         const fetchDownloads = async () => {
@@ -17,7 +17,7 @@ const UserProfile = () => {
             try {
                 const res = await axios.get(`${gpath}/api/user/downloads?userId=${user._id}`);
                 setDownloads(res.data);
-                setDataloaded(true);
+                // setDataloaded(true);
                 console.log("Downloads fetched:", res.data);
             } catch (err) {
                 console.error("Error fetching downloads:", err);
@@ -69,7 +69,7 @@ const UserProfile = () => {
     }
 
     return (
-        <div className={`container mt-4 d-flex justify-content-center align-items-center flex-column ${dataloaded ? "" : "vh-100"}`}>
+        <div className={`container mt-4 d-flex justify-content-center align-items-center flex-column min-vh-100`}>
             <h2 className="mb-4 text-center pt-4">User Profile</h2>
             <h2>Welcome, {user.username}!</h2>
             <p>Email: {user.email}</p>
