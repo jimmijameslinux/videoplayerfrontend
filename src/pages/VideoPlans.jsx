@@ -60,7 +60,7 @@ const VideoPlans = ({ onPlanSelect }) => {
     };
 
     return (
-        <div className="container py-5 min-vh-100">
+        <div className="container py-5 min-dvh-100">
             <h2 className="text-center fw-bold mb-5 display-6 text-primary">Upgrade Your Plan</h2>
 
             <div className="row justify-content-center g-5">

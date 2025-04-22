@@ -113,7 +113,7 @@ const OtpVerification = () => {
     };
 
     return (
-        <div className="container mt-4 min-vh-100 d-flex justify-content-center align-items-center w-100 flex-column">
+        <div className="container mt-4 min-dvh-100 d-flex justify-content-center align-items-center w-100 flex-column">
             <h2 className="mb-4">OTP Verification</h2>
             {/* display countdown */}
             <div className="alert alert-info text-center max-w-400">

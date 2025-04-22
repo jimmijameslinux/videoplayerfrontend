@@ -41,7 +41,7 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="container pt-5 min-vh-100" style={{ maxWidth: 400 }}>
+        <div className="container pt-5 min-dvh-100" style={{ maxWidth: 400 }}>
             {msg && (
                 <div className={`alert text-center ${isSuccess ? 'alert-success' : 'alert-danger'}`}>
                     {msg}

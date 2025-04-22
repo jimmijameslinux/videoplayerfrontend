@@ -69,7 +69,7 @@ const UserProfile = () => {
     }
 
     return (
-        <div className={`container mt-4 d-flex justify-content-center align-items-center flex-column min-vh-100`}>
+        <div className={`container mt-4 d-flex justify-content-center align-items-center flex-column min-dvh-100`}>
             <h2 className="mb-4 text-center pt-4">User Profile</h2>
             <h2>Welcome, {user.username}!</h2>
             <p>Email: {user.email}</p>
