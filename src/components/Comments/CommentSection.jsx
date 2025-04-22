@@ -118,35 +118,34 @@ const CommentSection = ({ videoId }) => {
         setNewComment('');
 
         try {
-            // Step 3: Fetch city in background
-            console.log(userLocation);
-            const cityName = await getUserLocation();
-            console.log("City fetched in handleCommentSubmit:", cityName);
-
-            // Step 4: Update UI with actual city
-            setComments((prevComments) =>
-                prevComments.map((comment) =>
-                    comment._id === tempId ? { ...comment, city: cityName } : comment
-                )
-            );
-
-            // Step 5: Send the comment to the backend
-            const response = await axios.post("http://localhost:5000/api/comments/add_comment", {
+             // Save comment immediately without city
+             const response = await axios.post(`${gpath}/api/comments/add_comment`, {
                 ...tempComment,
-                city: cityName, // Use actual city
+                city: "Fetching...",
             });
 
-            // Step 6: Replace temporary comment with backend response
-            setComments((prevComments) =>
-                prevComments.map((comment) =>
-                    comment._id === tempId ? response.data : comment
-                )
+            const savedComment = response.data;
+
+            setComments((prev) =>
+                prev.map((c) => (c._id === tempId ? savedComment : c))
             );
 
+            // Fetch location and update backend
+            const cityName = await getUserLocation();
+
+            await axios.patch(`${gpath}/api/comments/update_location`, {
+                commentId: savedComment._id,
+                city: userLocation,
+            });
+
+            setComments((prev) =>
+                prev.map((c) =>
+                    c._id === savedComment._id ? { ...c, city: cityName } : c
+                )
+            );
         } catch (error) {
             console.error("Error submitting comment:", error);
-            // Remove temporary comment if submission fails
-            setComments((prevComments) => prevComments.filter((c) => c._id !== tempId));
+            setComments((prev) => prev.filter((c) => c._id !== tempId));
         }
     };
 

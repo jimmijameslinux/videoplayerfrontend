@@ -32,6 +32,12 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
   const [message, setMessage] = useState("");
   const [isDownloading, setIsDownloading] = useState(false);
+
+  let hasDownloadedconfirm;
+  if (user) {
+    hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
+  }
+
   //user.plan
   useEffect(() => {
     setLoading(true);
@@ -63,6 +69,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
   // if(user.plan==="Gold"){
   //   setDisablepricing(true);
   // }
+
 
   useEffect(() => {
     if (!user) {
@@ -109,11 +116,11 @@ const VideoPlayer = ({ setDisablepricing }) => {
   // };
 
   useEffect(() => {
-    if (!hasDownloaded && played >= timeLimit) {
+    if ((!hasDownloadedconfirm && played >= timeLimit)) {
       setIsPlaying(false);
       navigate("/plans");
     }
-  }, [played, timeLimit, navigate, hasDownloaded]);
+  }, [played, timeLimit, navigate, hasDownloadedconfirm]);
 
 
   const handleGesture = (event) => {
@@ -151,7 +158,7 @@ const VideoPlayer = ({ setDisablepricing }) => {
     return <p className="text-center text-danger">{error}</p>;
   }
 
-  if (!videoData || !videoData.qualities ) {
+  if (!videoData || !videoData.qualities) {
     return <p className="text-center text-muted">No video available.</p>;
   }
 
@@ -185,12 +192,13 @@ const VideoPlayer = ({ setDisablepricing }) => {
 
     // check if user has already downloaded the video
     if (hasDownloaded) {
+      setIsPlaying(true);
       setMessage("You have already downloaded this video.");
       return;
     }
 
 
-    
+
     try {
       const res = await axios.post(
         `${gpath}/api/upload/download/${id}`,
@@ -232,12 +240,12 @@ const VideoPlayer = ({ setDisablepricing }) => {
     }
   };
 
-  let hasDownloadedconfirm;
-  // loop through user.downloadHistory and match id with videoId
-  if (user) {
-    hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
-    // console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
-  }
+  // let hasDownloadedconfirm;
+  // // loop through user.downloadHistory and match id with videoId
+  // if (user) {
+  //   hasDownloadedconfirm = user.downloadHistory?.some((video) => video.videoId === id);
+  //   // console.log("Has Downloaded Confirm:", hasDownloadedconfirm);
+  // }
 
 
   // fetch video qualities from server
@@ -277,8 +285,8 @@ const VideoPlayer = ({ setDisablepricing }) => {
             >
               {
                 Object.keys(videoData.qualities).sort().map((q) => (
-                <option key={q} value={q}>{q}</option>
-              ))}
+                  <option key={q} value={q}>{q}</option>
+                ))}
             </select>
           </div>
 
@@ -315,13 +323,13 @@ const VideoPlayer = ({ setDisablepricing }) => {
             {/* bootstrap alert */}
             {message && (
               <>
-              <div className="alert alert-danger mt-2 position-fixed top-0 end-0" role="alert">
-                {message}
-                <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                  {/* <span aria-hidden="true">&times;</span> */}
-                </button>
-              </div>
-                </>
+                <div className="alert alert-danger mt-2 position-fixed top-0 end-0" role="alert">
+                  {message}
+                  <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    {/* <span aria-hidden="true">&times;</span> */}
+                  </button>
+                </div>
+              </>
               // close button
             )}
 

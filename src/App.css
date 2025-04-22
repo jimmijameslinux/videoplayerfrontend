@@ -26,6 +26,10 @@ body {
     color: #ffffff;
     /* transition: background-color 0.3s, color 0.3s; */
   }
+
+  .min-dvh-100 {
+    min-height: 100dvh !important;
+  }
   
   /* Apply to all elements */
   /* .light-theme body, 
