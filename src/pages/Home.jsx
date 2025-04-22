@@ -15,6 +15,7 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const { user } = useContext(AuthContext);
     const [sortOption, setSortOption] = useState("title-asc");
+    const [imageLoaded, setImageLoaded] = useState({}); // Track each image
     // const [dataloaded, setDataloaded] = useState(false);
 
     useEffect(() => {
@@ -30,6 +31,10 @@ const Home = () => {
                 setLoading(false);
             });
     }, []);
+
+    const handleImageLoad = (videoId) => {
+        setImageLoaded(prev => ({ ...prev, [videoId]: true }));
+    };
 
     const filteredVideos = videos
         .filter(video =>
@@ -110,7 +115,7 @@ const Home = () => {
                 <div className="row">
                     {filteredVideos.map(video => {
                         const isDownloaded = downloadedVideoIds.includes(video._id);
-
+                        const isLoaded = imageLoaded[video._id];
                         return (
                             <div key={video._id} className="d-flex justify-content-center align-items-center col-md-4 mb-4">
                                 <div
@@ -122,7 +127,22 @@ const Home = () => {
                                         backgroundColor: isDownloaded ? "#1a1a2e" : "#212529"  // or change bg color
                                     }}
                                 >
-                                    <img src={`${gpath}${video.thumbnail}`} height={"100%"} className="card-img-top" alt={video.title} />
+                                   <div style={{ position: "relative", height: 180, overflow: "hidden" }}>
+                                        {!isLoaded && (
+                                            <div className="d-flex justify-content-center align-items-center w-100 h-100 bg-dark">
+                                                <div className="spinner-border text-light" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <img
+                                            src={`${gpath}${video.thumbnail}`}
+                                            alt={video.title}
+                                            className="card-img-top"
+                                            style={{ display: isLoaded ? "block" : "none", objectFit: "cover", width: "100%", height: "100%" }}
+                                            onLoad={() => handleImageLoad(video._id)}
+                                        />
+                                    </div>
                                     <div className="card-body mt-4">
                                         <h5 className="card-title text-white">{video.title}</h5>
                                         <p className="card-text text-truncate text-white">{video.description}</p>

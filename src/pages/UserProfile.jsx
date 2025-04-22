@@ -9,6 +9,8 @@ const UserProfile = () => {
     const { login } = useContext(AuthContext);
     const [downloads, setDownloads] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [imageLoaded, setImageLoaded] = useState({}); // Track each image
+
     // const [dataloaded, setDataloaded] = useState(false);
     // console.log(user.userId)
     useEffect(() => {
@@ -34,6 +36,10 @@ const UserProfile = () => {
     }, [user]);
 
     if (!user) return <div>Loading...</div>;
+
+    const handleImageLoad = (videoId) => {
+        setImageLoaded(prev => ({ ...prev, [videoId]: true }));
+    };
 
     const handleDelete = async (videoId) => {
         try {
@@ -89,29 +95,33 @@ const UserProfile = () => {
                 <p>No videos downloaded yet.</p>
             ) : (
                 <div className="row">
-                    {downloads.map(video => (
-                        <>
-                            <div key={video._id} className="d-flex justify-content-center align-items-center col-md-4 mb-4">
-                                <div className="" style={{
-                                    borderRadius: 10
-                                }}>
-                                    <img
-                                        src={`${gpath}${video.thumbnail}`}
-                                        // height={"100%"}
-                                        className="card-img-top"
-                                        alt={video.title}
-                                    />
-                                    <div className="mt-4">
-                                        <h5 className="text-white">{video.title}</h5>
-                                        <p className="text-white">{video.description}</p>
-                                        <Link to={`/video/${video._id}`} className="btn btn-primary w-100">Watch</Link>
-                                        <button onClick={() => handleDelete(video._id)} className="btn btn-danger w-100 mt-2">Delete</button>
+                    {downloads.map(video => {
+                        const isLoaded = imageLoaded[video._id];
+                        return (
+                            <>
+                                <div key={video._id} className="d-flex justify-content-center align-items-center col-md-4 mb-4">
+                                    <div className="" style={{
+                                        borderRadius: 10
+                                    }}>
+                                        <img
+                                            src={`${gpath}${video.thumbnail}`}
+                                            // height={"100%"}
+                                            className="card-img-top"
+                                            alt={video.title}
+                                        />
+                                        <div className="mt-4">
+                                            <h5 className="text-white">{video.title}</h5>
+                                            <p className="text-white">{video.description}</p>
+                                            <Link to={`/video/${video._id}`} className="btn btn-primary w-100">Watch</Link>
+                                            <button onClick={() => handleDelete(video._id)} className="btn btn-danger w-100 mt-2">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {/* // delete video */}
-                        </>
-                    ))}
+                                {/* // delete video */}
+                            </>
+                        );
+                    })
+                    }
                 </div>
             )}
         </div>
