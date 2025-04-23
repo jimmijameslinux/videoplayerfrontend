@@ -9,7 +9,7 @@ const UserProfile = () => {
     const { login } = useContext(AuthContext);
     const [downloads, setDownloads] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [imageLoaded, setImageLoaded] = useState({}); // Track each image
+    // const [imageLoaded, setImageLoaded] = useState({}); // Track each image
 
     // const [dataloaded, setDataloaded] = useState(false);
     // console.log(user.userId)
@@ -37,9 +37,9 @@ const UserProfile = () => {
 
     if (!user) return <div>Loading...</div>;
 
-    const handleImageLoad = (videoId) => {
-        setImageLoaded(prev => ({ ...prev, [videoId]: true }));
-    };
+    // const handleImageLoad = (videoId) => {
+    //     setImageLoaded(prev => ({ ...prev, [videoId]: true }));
+    // };
 
     const handleDelete = async (videoId) => {
         try {
@@ -96,7 +96,7 @@ const UserProfile = () => {
             ) : (
                 <div className="row">
                     {downloads.map(video => {
-                        const isLoaded = imageLoaded[video._id];
+                        // const isLoaded = imageLoaded[video._id];
                         return (
                             <>
                                 <div key={video._id} className="d-flex justify-content-center align-items-center col-md-4 mb-4">
