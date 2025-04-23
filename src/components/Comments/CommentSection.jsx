@@ -222,10 +222,8 @@ const CommentSection = ({ videoId }) => {
 
     return (
         <div className="container mt-4">
-            <h3 className="text-primary">Comment Section</h3>
-            {/* alert comment added successfully after commented is true for few seconds */}
             {commented && (
-                <div className="alert alert-success alert-dismissible fade show" role="alert">
+                <div className="alert alert-success alert-dismissible fade show position-fixed top-0 end-0" role="alert">
                     Comment added successfully!
                     <button
                         type="button"
@@ -235,6 +233,8 @@ const CommentSection = ({ videoId }) => {
                     ></button>
                 </div>
             )}
+            <h3 className="text-primary">Comment Section</h3>
+            {/* alert comment added successfully after commented is true for few seconds */}
 
             {user ? (
                 // <div className="mb-3">
