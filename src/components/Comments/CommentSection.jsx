@@ -172,7 +172,7 @@ const CommentSection = ({ videoId }) => {
     };
     const handleLike = async (id) => {
         try {
-            const response = await axios.patch(`http://localhost:5000/api/comments/like_comment`, {
+            const response = await axios.patch(`${gpath}/api/comments/like_comment`, {
                 commentId: id,
                 userId: user._id
             });
@@ -191,7 +191,7 @@ const CommentSection = ({ videoId }) => {
 
     const handleDislike = async (id) => {
         try {
-            const response = await axios.patch(`http://localhost:5000/api/comments/dislike_comment`, {
+            const response = await axios.patch(`${gpath}/api/comments/dislike_comment`, {
                 commentId: id,
                 userId: user._id
             });
