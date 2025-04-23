@@ -38,7 +38,7 @@ const CommentSection = ({ videoId }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [translatedComments, setTranslatedComments] = useState({});
-    const [userLocation, setUserLocation] = useState(''); // Tracks user location
+    // const [userLocation, setUserLocation] = useState(''); // Tracks user location
     
     const fetchComments =useCallback ( async () => {
         try {
@@ -80,7 +80,7 @@ const CommentSection = ({ videoId }) => {
                     const state = components?.state || "Unknown State";
                     console.log("State found:", state);
                     const combinedlocation = `${city}, ${state}`;
-                    setUserLocation(combinedlocation); // Update state with the city
+                    // setUserLocation(combinedlocation); // Update state with the city
                     resolve(combinedlocation);
                 } catch (error) {
                     console.log("Error fetching location:", error.message);
@@ -135,7 +135,7 @@ const CommentSection = ({ videoId }) => {
 
             await axios.patch(`${gpath}/api/comments/update_location`, {
                 commentId: savedComment._id,
-                city: userLocation,
+                city: cityName,
             });
 
             setComments((prev) =>
@@ -143,6 +143,9 @@ const CommentSection = ({ videoId }) => {
                     c._id === savedComment._id ? { ...c, city: cityName } : c
                 )
             );
+
+            // successfully added comment alert
+            alert("Comment added successfully!");
         } catch (error) {
             console.error("Error submitting comment:", error);
             setComments((prev) => prev.filter((c) => c._id !== tempId));
