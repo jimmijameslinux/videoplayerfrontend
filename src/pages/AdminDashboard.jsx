@@ -7,7 +7,7 @@ import gpath from '../utility/globalPath';
 const AdminDashboard = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [quality, setQuality] = useState('');
+  const [quality, setQuality] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
   const [videos, setVideos] = useState([]);
   const [editVideo, setEditVideo] = useState(null);
@@ -53,7 +53,14 @@ console.log(admin)
   // console.log(totaldownload)
 
   // total downloads in useEffect
-
+  const handleQualityChange = (selectedQuality) => {
+    setQuality(prev =>
+      prev.includes(selectedQuality)
+        ? prev.filter(q => q !== selectedQuality)
+        : [...prev, selectedQuality]
+    );
+  };
+  
 
   const handleUpload = async (e) => {
     console.log("upload")
@@ -63,7 +70,7 @@ console.log(admin)
     formData.append('title', title);
     formData.append('description', description);
     formData.append('video', videoFile);
-    formData.append('quality', quality);
+    formData.append('quality', quality.join(',')); // Convert array to comma-separated string
 
     try {
       await axios.post(`${gpath}/api/upload`, formData, {
@@ -131,6 +138,7 @@ console.log(admin)
     navigate('/adminlogin');
   }
   }, [admin, navigate]);
+  
 
   return (
     <div className="container py-4 min-dvh-100">
@@ -227,8 +235,8 @@ console.log(admin)
                       type="checkbox"
                       className="form-check-input"
                       id="qualityCheck360p"
-                      
-                      onChange={e => setQuality(e.target.checked ? '360p' : '')}
+                      checked={quality.includes('360p')}
+                      onChange={() => handleQualityChange('360p')}
                     />
                     <label className="form-check-label" htmlFor="qualityCheck360p">360p</label>
                   </div>
@@ -238,7 +246,8 @@ console.log(admin)
                       type="checkbox"
                       className="form-check-input"
                       id="qualityCheck480p"
-                      onChange={e => setQuality(e.target.checked ? '480p' : '')}
+                      checked={quality.includes('480p')}
+                      onChange={() => handleQualityChange('480p')}
                     />
                     <label className="form-check-label" htmlFor="qualityCheck480p">480p</label>
                   </div>
@@ -248,7 +257,8 @@ console.log(admin)
                       type="checkbox"
                       className="form-check-input"
                       id="qualityCheck720p"
-                      onChange={e => setQuality(e.target.checked ? '720p' : '')}
+                      checked={quality.includes('720p')}
+                      onChange={() => handleQualityChange('720p')}
                     />
                     <label className="form-check-label" htmlFor="qualityCheck720p">720p</label>
                   </div>
@@ -258,7 +268,8 @@ console.log(admin)
                       type="checkbox"
                       className="form-check-input"
                       id="qualityCheck1080p"
-                      onChange={e => setQuality(e.target.checked ? '1080p' : '')}
+                      checked={quality.includes('1080p')}
+                      onChange={() => handleQualityChange('1080p')}
                     />
                     <label className="form-check-label" htmlFor="qualityCheck1080p">1080p</label>
                   </div>
