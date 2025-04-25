@@ -121,7 +121,7 @@ const Navbar = ({ disablepricing, theme, setTheme }) => {
                                     <Link className="nav-link" to="/profile">{user.username}</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <button className={`btn ${theme === "light" ? "btn-outline-dark" : "btn-outline-light"} mt-2`} onClick={logout}>Logout</button>
+                                    <button className={`btn ${theme === "light" ? "btn-outline-dark" : "btn-outline-light"} mt-2`} onClick={handleLogout}>Logout</button>
                                 </li>
                             </>
                         )}

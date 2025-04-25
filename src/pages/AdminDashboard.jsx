@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
-  const {admin} = useContext(AuthContext);
+  const {admin, logoutAdmin} = useContext(AuthContext);
   const navigate = useNavigate();
 
 
@@ -34,6 +34,11 @@ console.log(admin)
     const res = await axios.get(`${gpath}/api/admin/videos/users`);
     setUsers(res.data);
   };
+
+  const handleAdminLogout = () => {
+    logoutAdmin();               // Clear user from context/localStorage
+    navigate("/adminlogin");     // Redirect to login page
+};
 
   useEffect(() => {
     fetchVideos();
@@ -149,7 +154,7 @@ console.log(admin)
         <button className="btn btn-success" onClick={() => setShowUploadModal(true)}>
           Upload Video
         </button>
-        <button className="btn btn-danger ms-2" onClick={() => {localStorage.removeItem('token'); localStorage.removeItem('admin'); navigate('/adminlogin')}}>
+        <button className="btn btn-danger ms-2" onClick={handleAdminLogout}>
           Logout
         </button>
         </div>

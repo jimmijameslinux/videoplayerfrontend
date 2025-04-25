@@ -8,7 +8,9 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: red !important;
+    /* background-color: red !important; */
+    background-color: #1a1a2e !important;
+
     color: #333;
     transition: background-color 0.3s, color 0.3s;
     overflow-x: hidden;
